@@ -10,7 +10,7 @@ export interface AdminUser {
   email: string;
   phone: string;
   gender: string;
-  role: "user" | "admin"; // 필요한 역할만 구체화 가능
+  role: "user" | "admin";
   provider: string | null;
   isPhoneVerified: boolean;
   eid_refresh_token: string;
@@ -42,6 +42,17 @@ export const fetchAdminUsers = createAsyncThunk(
   }
 );
 
+// ✅ 유저 삭제 thunk
+export const deleteAdminUser = createAsyncThunk(
+  "admin/deleteUser",
+  async (userId: number, { dispatch }) => {
+    await axios.delete(`http://localhost:5000/admin/users/${userId}`);
+    // 삭제 후 유저 목록 갱신
+    dispatch(fetchAdminUsers());
+    return userId; // 필요 시 return (예: 알림용)
+  }
+);
+
 // ✅ Slice 생성
 const adminUserSlice = createSlice({
   name: "adminUsers",
@@ -61,6 +72,20 @@ const adminUserSlice = createSlice({
         state.loading = false;
         state.error =
           action.error.message ?? "유저 정보를 불러오지 못했습니다.";
+      })
+
+      // 삭제 처리
+      .addCase(deleteAdminUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteAdminUser.fulfilled, (state) => {
+        state.loading = false;
+        // fetchAdminUsers로 갱신하므로 상태는 여기서 직접 수정하지 않아도 됨
+      })
+      .addCase(deleteAdminUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "유저 삭제에 실패했습니다.";
       });
   },
 });
