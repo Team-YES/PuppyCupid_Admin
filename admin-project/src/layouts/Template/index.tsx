@@ -1,10 +1,9 @@
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
+import Content from "../Content";
+import Sidebar from "../Sidebar";
+import { TemplateStyled } from "./styled";
 
-import Content from '../Content';
-import Sidebar from '../Sidebar';
-import { TemplateStyled } from './styled';
-
-import clsx from 'clsx';
+import clsx from "clsx";
 
 export interface TemplateProps {
   className?: string;
@@ -13,7 +12,7 @@ export interface TemplateProps {
 
 const Template = ({ className, children }: TemplateProps) => {
   return (
-    <TemplateStyled className={clsx('Template', className)}>
+    <TemplateStyled className={clsx("Template", className)}>
       <Sidebar />
       <Content>{children}</Content>
     </TemplateStyled>

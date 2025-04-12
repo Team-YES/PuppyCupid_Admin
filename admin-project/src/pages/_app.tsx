@@ -5,7 +5,10 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import { Provider } from "react-redux";
+import { store } from "@/store/store";
 
+// Component, pageProps : App컴포넌트를 호출할 때 자동으로 넘겨주는 값
 export default function App({ Component, pageProps }: AppProps) {
   const [notPc, setNotPc] = useState(false);
 
@@ -41,9 +44,11 @@ export default function App({ Component, pageProps }: AppProps) {
       ) : (
         <>
           <Header />
-          <Template>
-            <Component {...pageProps} />
-          </Template>
+          <Provider store={store}>
+            <Template>
+              <Component {...pageProps} />
+            </Template>
+          </Provider>
         </>
       )}
     </>

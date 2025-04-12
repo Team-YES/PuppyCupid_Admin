@@ -1,4 +1,6 @@
+import UserInfo from "@/components/UserInfo";
+
 const UserManage = () => {
-  return <div>회원 정보</div>;
+  return <UserInfo title={"회원 정보"} />;
 };
 export default UserManage;

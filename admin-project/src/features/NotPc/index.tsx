@@ -1,9 +1,10 @@
-import { NotPcStyled } from './styled';
-import React from 'react';
-import { CloseCircleOutlined } from '@ant-design/icons';
-import { Button, Result, Typography } from 'antd';
+import { NotPcStyled } from "./styled";
+import React from "react";
+import { CloseCircleOutlined } from "@ant-design/icons";
+import { Button, Result, Typography } from "antd";
 
 const { Paragraph, Text } = Typography;
+
 const NotPc = () => {
   return (
     <NotPcStyled>
@@ -31,11 +32,11 @@ const NotPc = () => {
             </Text>
           </Paragraph>
           <Paragraph>
-            <CloseCircleOutlined className="site-result-demo-error-icon" />{' '}
+            <CloseCircleOutlined className="site-result-demo-error-icon" />{" "}
             관리자 페이지는 모바일에서 지원 하지 않습니다.
           </Paragraph>
           <Paragraph>
-            <CloseCircleOutlined className="site-result-demo-error-icon" />{' '}
+            <CloseCircleOutlined className="site-result-demo-error-icon" />{" "}
             콘텐츠 특성상 PC로 접속해 주세요.
           </Paragraph>
         </div>

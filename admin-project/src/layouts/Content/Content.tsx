@@ -1,8 +1,8 @@
-import { ReactNode } from 'react';
-import { useRouter } from 'next/router';
-import { ContentStyled } from './styled';
-import clsx from 'clsx';
-import { AnimatePresence, motion } from 'framer-motion';
+import { ReactNode } from "react";
+import { useRouter } from "next/router";
+import { ContentStyled } from "./styled";
+import clsx from "clsx";
+import { AnimatePresence, motion } from "framer-motion";
 
 export interface ContentProps {
   className?: string;
@@ -13,7 +13,7 @@ const Content = ({ className, children }: ContentProps) => {
   const router = useRouter();
 
   return (
-    <ContentStyled className={clsx('Content', className)}>
+    <ContentStyled className={clsx("Content", className)}>
       <main>
         <AnimatePresence>
           <motion.div

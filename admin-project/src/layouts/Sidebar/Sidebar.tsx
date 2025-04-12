@@ -30,7 +30,7 @@ const Sidebar = ({ className, children }: SidebarProps) => {
             />
           </Layout.Sider>
 
-          <Layout style={{ marginLeft: 200 }}>
+          {/* <Layout style={{ marginLeft: 200 }}>
             <Layout.Content
               style={{
                 padding: 24,
@@ -40,7 +40,7 @@ const Sidebar = ({ className, children }: SidebarProps) => {
             >
               <div style={{ padding: "24px" }}>{children}</div>
             </Layout.Content>
-          </Layout>
+          </Layout> */}
         </Layout>
       </div>
     </SidebarStyled>
