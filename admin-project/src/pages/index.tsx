@@ -1,7 +1,6 @@
-import Admin from "@/features/Admin";
+import DashBoard from "@/features/DashPage";
 
-const AdminPage = () => {
-  return <Admin />;
+const Home = () => {
+  return <DashBoard />;
 };
-
-export default AdminPage;
+export default Home;

@@ -1,55 +1,43 @@
-import Document, {
-  Html,
-  Head,
-  Main,
-  NextScript,
-  DocumentContext,
-} from "next/document";
+import { Html, Head, Main, NextScript } from "next/document";
+import Script from "next/script";
 import { ServerStyleSheet } from "styled-components";
 
-// DocumentContext 타입을 사용하여 ctx의 타입을 정의합니다.
-class MyDocument extends Document {
-  static async getInitialProps(ctx: DocumentContext) {
-    const sheet = new ServerStyleSheet();
-    const originalRenderPage = ctx.renderPage;
+const Document = () => {
+  return (
+    <Html lang="en">
+      <Head></Head>
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  );
+};
 
-    try {
-      // 페이지 렌더링을 감싸서 styled-components 스타일을 수집합니다.
-      ctx.renderPage = () =>
-        originalRenderPage({
-          enhanceApp: (App) => (props) =>
-            sheet.collectStyles(<App {...props} />),
-        });
+Document.getInitialProps = async (ctx: any) => {
+  const sheet = new ServerStyleSheet();
+  const originalRenderPage = ctx.renderPage;
 
-      const initialProps = await Document.getInitialProps(ctx);
+  try {
+    ctx.renderPage = () =>
+      originalRenderPage({
+        enhanceApp: (App: any) => (props: any) =>
+          sheet.collectStyles(<App {...props} />),
+      });
 
-      // styled-components 스타일을 반환하여 SSR에 스타일을 포함시킵니다.
-      return {
-        ...initialProps,
-        styles: (
-          <>
-            {initialProps.styles}
-            {sheet.getStyleElement()} {/* 수집된 스타일을 추가 */}
-          </>
-        ),
-      };
-    } finally {
-      sheet.seal();
-    }
+    const initialProps = await ctx.defaultGetInitialProps(ctx);
+    return {
+      ...initialProps,
+      styles: (
+        <>
+          {initialProps.styles}
+          {sheet.getStyleElement()}
+        </>
+      ),
+    };
+  } finally {
+    sheet.seal();
   }
+};
 
-  render() {
-    return (
-      <Html>
-        <Head></Head>
-
-        <body>
-          <Main />
-          <NextScript />
-        </body>
-      </Html>
-    );
-  }
-}
-
-export default MyDocument;
+export default Document;
