@@ -10,6 +10,7 @@ import type { RootState, AppDispatch } from "@/store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { formatGender, formatPhone, formatKoreanDate } from "@/utill/format";
+import { showConfirmModal } from "@/lib/confirmModal";
 
 interface TitleProps {
   title: string;
@@ -33,7 +34,7 @@ const UserInfo = ({ title, button }: TitleProps) => {
     setInfo(users); // Redux 데이터 → 로컬 상태 복사
   }, [users]);
 
-  // console.log("유저 정보", info);
+  console.log("유저 정보", info);
 
   // 테이블 헤더
   const headerLabels = [
@@ -49,16 +50,15 @@ const UserInfo = ({ title, button }: TitleProps) => {
 
   // 유저 삭제
   const handleDelete = (userId: number) => {
-    Modal.confirm({
+    showConfirmModal({
       title: "회원 삭제",
       content: "정말로 해당 회원을 삭제하시겠습니까?",
       okText: "삭제",
       okType: "danger",
-      cancelText: "취소",
-      onOk() {
-        return dispatch(deleteAdminUser(userId)).then(() => {
-          message.success("회원이 성공적으로 삭제되었습니다.");
-        });
+      onOk: async () => {
+        await dispatch(deleteAdminUser(userId)).unwrap();
+        await dispatch(fetchAdminUsers());
+        message.success("회원이 성공적으로 삭제되었습니다.");
       },
     });
   };

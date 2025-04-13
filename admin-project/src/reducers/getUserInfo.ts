@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// ✅ 유저 타입 정의
+// 유저 타입 정의
 export interface AdminUser {
   id: number;
   name: string;
@@ -17,21 +17,21 @@ export interface AdminUser {
   power_expired_at: string | null;
 }
 
-// ✅ 초기 상태 타입
+// 초기 상태 타입
 interface AdminUserState {
   users: AdminUser[];
   loading: boolean;
   error: string | null;
 }
 
-// ✅ 초기 상태
+// 초기 상태
 const initialState: AdminUserState = {
   users: [],
   loading: false,
   error: null,
 };
 
-// ✅ 유저 정보 가져오는 비동기 thunk
+// 유저 정보 가져오는 비동기 thunk
 export const fetchAdminUsers = createAsyncThunk(
   "admin/fetchUsers",
   async () => {
@@ -41,7 +41,7 @@ export const fetchAdminUsers = createAsyncThunk(
   }
 );
 
-// ✅ 유저 삭제 thunk
+// 유저 삭제 thunk
 export const deleteAdminUser = createAsyncThunk(
   "admin/deleteUser",
   async (userId: number, { dispatch }) => {
@@ -52,7 +52,7 @@ export const deleteAdminUser = createAsyncThunk(
   }
 );
 
-// ✅ Slice 생성
+// Slice 생성
 const adminUserSlice = createSlice({
   name: "adminUsers",
   initialState,
@@ -78,8 +78,9 @@ const adminUserSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(deleteAdminUser.fulfilled, (state) => {
+      .addCase(deleteAdminUser.fulfilled, (state, action) => {
         state.loading = false;
+        // state.users = state.users.filter(user => user.id !== action.payload);
         // fetchAdminUsers로 갱신하므로 상태는 여기서 직접 수정하지 않아도 됨
       })
       .addCase(deleteAdminUser.rejected, (state, action) => {

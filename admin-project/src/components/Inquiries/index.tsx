@@ -16,7 +16,8 @@ import {
   formatPhone,
   formatStatus,
 } from "@/utill/format";
-import { Button, Modal, Select } from "antd";
+import { Button, Modal, Select, message } from "antd";
+import { showConfirmModal } from "@/lib/confirmModal";
 
 interface TitleProps {
   title: string;
@@ -66,36 +67,45 @@ const InquiriesComp = ({ title, button }: TitleProps) => {
 
   // 문의 삭제
   const handleDeleteInquiry = async (id: number) => {
-    const confirmDelete = window.confirm("해당 문의를 정말 삭제하시겠습니까?");
-    if (!confirmDelete) return;
-
-    try {
-      await dispatch(deleteAdminInquiry(id)).unwrap();
-      alert("삭제가 완료되었습니다.");
-    } catch (error) {
-      alert("삭제 중 오류가 발생했습니다.");
-      console.error("삭제 실패:", error);
-    }
+    showConfirmModal({
+      title: "문의 삭제",
+      content: "해당 문의를 정말 삭제하시겠습니까?",
+      okText: "삭제",
+      okType: "danger",
+      onOk: async () => {
+        try {
+          await dispatch(deleteAdminInquiry(id)).unwrap();
+          message.success("문의가 성공적으로 삭제되었습니다.");
+        } catch (error) {
+          message.error("문의 삭제 중 오류가 발생했습니다.");
+          console.error("삭제 실패:", error);
+        }
+      },
+    });
   };
 
   // 문의 상태 업데이트
   const handleMarkAsResolved = async () => {
     if (!selectedInquiry) return;
-    const confirmUpdate = window.confirm(
-      "해당 문의를 '완료' 상태로 변경하시겠습니까?"
-    );
-    if (!confirmUpdate) return;
 
-    try {
-      await dispatch(
-        patchInquiryStatus({ id: selectedInquiry.id, status: "resolved" })
-      ).unwrap();
-      alert("문의 상태가 '완료'로 변경되었습니다.");
-      handleCloseModal(); // 모달 닫기
-    } catch (error) {
-      alert("상태 변경 중 오류가 발생했습니다.");
-      console.error("상태 변경 실패:", error);
-    }
+    showConfirmModal({
+      title: "문의 상태 변경",
+      content: "해당 문의를 '완료' 상태로 변경하시겠습니까?",
+      okText: "변경",
+      okType: "primary",
+      onOk: async () => {
+        try {
+          await dispatch(
+            patchInquiryStatus({ id: selectedInquiry.id, status: "resolved" })
+          ).unwrap();
+          message.success("문의 상태가 '완료'로 변경되었습니다.");
+          handleCloseModal();
+        } catch (error) {
+          message.error("문의 상태 변경 중 오류가 발생했습니다.");
+          console.error("상태 변경 실패:", error);
+        }
+      },
+    });
   };
 
   // 필터 적용 및 정렬
