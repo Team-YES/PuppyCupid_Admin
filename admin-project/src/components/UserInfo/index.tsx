@@ -20,6 +20,11 @@ interface TitleProps {
 const UserInfo = ({ title, button }: TitleProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
+  // 최초 마운트 시 유저 불러오기
+  useEffect(() => {
+    dispatch(fetchAdminUsers());
+  }, [dispatch]);
+
   // 조회
   const users = useSelector((state: RootState) => state.adminUsers.users);
   const [info, setInfo] = useState<AdminUser[]>([]);
@@ -28,12 +33,7 @@ const UserInfo = ({ title, button }: TitleProps) => {
     setInfo(users); // Redux 데이터 → 로컬 상태 복사
   }, [users]);
 
-  console.log("유저 정보", info);
-
-  // 최초 마운트 시 유저 불러오기
-  useEffect(() => {
-    dispatch(fetchAdminUsers());
-  }, [dispatch]);
+  // console.log("유저 정보", info);
 
   // 테이블 헤더
   const headerLabels = [
@@ -65,7 +65,7 @@ const UserInfo = ({ title, button }: TitleProps) => {
 
   return (
     <UserInfoStyled className={clsx("userInfo")}>
-      <div className="userInfo_title">
+      <div className="global_title">
         {title} {button ? <Button>{button}</Button> : <></>}
       </div>
 

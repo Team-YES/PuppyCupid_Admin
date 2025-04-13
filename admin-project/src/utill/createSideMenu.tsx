@@ -40,6 +40,14 @@ export const sidebarMenus = createSidebarMenus([
         key: "/users/manage",
         label: "회원 정보",
       },
+      {
+        key: "/users/reports",
+        label: "신고 정보",
+      },
+      {
+        key: "/users/inquiries",
+        label: "문의 정보",
+      },
     ],
   },
 ]);
