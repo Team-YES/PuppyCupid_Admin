@@ -1,5 +1,6 @@
 // src/utils/format.ts
 import { format } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
 import { ko } from "date-fns/locale";
 
 // 성별 포맷
@@ -15,9 +16,10 @@ export const formatPhone = (phone?: string): string => {
   return phone.replace(/(\d{3})(\d{3,4})(\d{4})/, "$1-$2-$3");
 };
 
-// 가입일 포맷 (한국 시간 기준)
+// 연/월/일/시간 포맷 (한국 시간 기준)
 export const formatKoreanDate = (dateStr: string): string => {
+  const timeZone = "Asia/Seoul";
   const date = new Date(dateStr);
-  const kstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000); // UTC+9
-  return format(kstDate, "yyyy-MM-dd HH:mm", { locale: ko });
+  const zonedDate = toZonedTime(date, timeZone);
+  return format(zonedDate, "yyyy-MM-dd HH:mm", { locale: ko });
 };
