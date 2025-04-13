@@ -38,7 +38,7 @@ const ReportsComp = ({ title, button }: TitleProps) => {
   const [info, setInfo] = useState<Report[]>([]);
   const [filterType, setFilterType] = useState<string>("all");
 
-  // console.log("신고정보", info);
+  console.log("신고정보", info);
 
   // 필터 적용 및 정렬
   useEffect(() => {

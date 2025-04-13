@@ -37,7 +37,7 @@ export const getAdminReports = createAsyncThunk(
     try {
       const res = await axios.get("http://localhost:5000/admin/reports");
 
-      console.log("신고reducer", res.data);
+      // console.log("신고reducer", res.data);
       return res.data.reports;
     } catch (error: any) {
       console.error("admin report 요청 실패:", error);
