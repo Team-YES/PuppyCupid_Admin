@@ -23,3 +23,17 @@ export const formatKoreanDate = (dateStr: string): string => {
   const zonedDate = toZonedTime(date, timeZone);
   return format(zonedDate, "yyyy-MM-dd HH:mm", { locale: ko });
 };
+
+// 신고유형 포맷
+export const formatReportType = (type: string) => {
+  switch (type) {
+    case "post":
+      return "게시글 신고";
+    case "comment":
+      return "댓글 신고";
+    case "user":
+      return "유저 신고";
+    default:
+      return "기타";
+  }
+};

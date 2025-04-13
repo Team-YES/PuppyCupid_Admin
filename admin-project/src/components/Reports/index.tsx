@@ -5,13 +5,21 @@ import { AppDispatch, RootState } from "@/store/store";
 import { useEffect, useState } from "react";
 import { Report, getAdminReports } from "@/reducers/getAdminReports";
 import { Cell } from "../UserInfo/styled";
-import { formatGender, formatKoreanDate, formatPhone } from "@/utill/format";
-import { Button } from "antd";
+import { formatKoreanDate, formatReportType } from "@/utill/format";
+import { Select } from "antd";
 
 interface TitleProps {
   title: string;
   button?: string;
 }
+
+// 유형 필터 옵션 정의
+const FILTER_OPTIONS = [
+  { label: "전체", value: "all" },
+  { label: "게시글 신고", value: "post" },
+  { label: "댓글 신고", value: "comment" },
+  { label: "유저 신고", value: "user" }, // 아직 존재하지 않아도 향후 확장 대비
+];
 
 // 신고 정보
 const ReportsComp = ({ title, button }: TitleProps) => {
@@ -29,10 +37,25 @@ const ReportsComp = ({ title, button }: TitleProps) => {
 
   const [info, setInfo] = useState<Report[]>([]);
   console.log("신고정보", info);
+  const [filterType, setFilterType] = useState<string>("all");
 
+  // 필터 적용 및 정렬
   useEffect(() => {
-    setInfo(reportData); // Redux 데이터 → 로컬 상태 복사
-  }, [reportData]);
+    let filtered = [...reportData];
+
+    if (filterType !== "all") {
+      filtered = filtered.filter((r) => r.reportType === filterType);
+    }
+
+    // 신고번호 오름차순 정렬
+    filtered.sort((a, b) => a.id - b.id);
+
+    setInfo(filtered);
+  }, [reportData, filterType]);
+
+  // useEffect(() => {
+  //   setInfo(reportData); // Redux 데이터 → 로컬 상태 복사
+  // }, [reportData]);
 
   // 테이블 헤더
   const headerLabels = [
@@ -48,7 +71,18 @@ const ReportsComp = ({ title, button }: TitleProps) => {
 
   return (
     <ReportsCompStyled className={clsx("Reports")}>
-      <div className="global_title">{title}</div>
+      <div className="Reports_header">
+        {/* 타이틀 */}
+        <div className="global_title">{title}</div>
+
+        {/* 유형 선택 */}
+        <Select
+          style={{ width: 150, marginLeft: "auto" }}
+          options={FILTER_OPTIONS}
+          value={filterType}
+          onChange={(value) => setFilterType(value)}
+        />
+      </div>
 
       {/* 테이블 헤더 */}
       <div className="Reports_table">
@@ -64,7 +98,7 @@ const ReportsComp = ({ title, button }: TitleProps) => {
         <div className="Reports_table" key={rowIdx}>
           {[
             data.id,
-            data.reportType,
+            formatReportType(data.reportType),
             data.targetId,
             data.reporter.nickName,
             data.reporter.email,
