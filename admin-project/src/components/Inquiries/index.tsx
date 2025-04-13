@@ -75,6 +75,8 @@ const InquiriesComp = ({ title, button }: TitleProps) => {
       onOk: async () => {
         try {
           await dispatch(deleteAdminInquiry(id)).unwrap();
+
+          await dispatch(getAdminInquiries()); // 데이터 최신화
           message.success("문의가 성공적으로 삭제되었습니다.");
         } catch (error) {
           message.error("문의 삭제 중 오류가 발생했습니다.");
@@ -98,6 +100,8 @@ const InquiriesComp = ({ title, button }: TitleProps) => {
           await dispatch(
             patchInquiryStatus({ id: selectedInquiry.id, status: "resolved" })
           ).unwrap();
+
+          await dispatch(getAdminInquiries()); // 데이터 최신화
           message.success("문의 상태가 '완료'로 변경되었습니다.");
           handleCloseModal();
         } catch (error) {
@@ -116,7 +120,7 @@ const InquiriesComp = ({ title, button }: TitleProps) => {
       filtered = filtered.filter((r) => r.type === filterType);
     }
 
-    // 신고번호 오름차순 정렬
+    // 문의번호 오름차순 정렬
     filtered.sort((a, b) => a.id - b.id);
 
     setInfo(filtered);
