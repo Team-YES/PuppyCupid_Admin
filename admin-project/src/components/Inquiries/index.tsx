@@ -7,6 +7,7 @@ import {
   getAdminInquiries,
   Inquiry,
   deleteAdminInquiry,
+  patchInquiryStatus,
 } from "@/reducers/getAdminInquiries";
 import { Cell } from "../UserInfo/styled";
 import {
@@ -77,6 +78,26 @@ const InquiriesComp = ({ title, button }: TitleProps) => {
     }
   };
 
+  // 문의 상태 업데이트
+  const handleMarkAsResolved = async () => {
+    if (!selectedInquiry) return;
+    const confirmUpdate = window.confirm(
+      "해당 문의를 '완료' 상태로 변경하시겠습니까?"
+    );
+    if (!confirmUpdate) return;
+
+    try {
+      await dispatch(
+        patchInquiryStatus({ id: selectedInquiry.id, status: "resolved" })
+      ).unwrap();
+      alert("문의 상태가 '완료'로 변경되었습니다.");
+      handleCloseModal(); // 모달 닫기
+    } catch (error) {
+      alert("상태 변경 중 오류가 발생했습니다.");
+      console.error("상태 변경 실패:", error);
+    }
+  };
+
   // 필터 적용 및 정렬
   useEffect(() => {
     let filtered = [...inquiryData];
@@ -136,8 +157,8 @@ const InquiriesComp = ({ title, button }: TitleProps) => {
             data.id,
             formatInquiryType(data.type),
             data.name,
-            data.user.email,
-            formatPhone(data.user.phone),
+            data?.user?.email,
+            formatPhone(data.user?.phone),
             formatStatus(data.status),
             formatKoreanDate(data.created_at),
             "보기",
@@ -164,7 +185,15 @@ const InquiriesComp = ({ title, button }: TitleProps) => {
         open={isModalOpen}
         onCancel={handleCloseModal}
         footer={[
-          <Button key="close" type="primary" onClick={handleCloseModal}>
+          <Button
+            key="markResolved"
+            type="primary"
+            onClick={handleMarkAsResolved}
+            disabled={selectedInquiry?.status === "resolved"}
+          >
+            '완료' 상태로 변경
+          </Button>,
+          <Button key="close" type="default" onClick={handleCloseModal}>
             닫기
           </Button>,
         ]}

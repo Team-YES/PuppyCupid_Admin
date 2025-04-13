@@ -56,7 +56,9 @@ export const formatStatus = (type: string) => {
   switch (type) {
     case "pending":
       return "진행중";
-    default:
+    case "resolved":
       return "완료";
+    default:
+      return type;
   }
 };

@@ -70,6 +70,25 @@ export const deleteAdminInquiry = createAsyncThunk<number, number>(
   }
 );
 
+// 문의 정보 상태 업데이트
+export const patchInquiryStatus = createAsyncThunk<
+  Inquiry,
+  { id: number; status: "pending" | "resolved" }
+>(
+  "adminInquiries/patchInquiryStatus",
+  async ({ id, status }, { rejectWithValue }) => {
+    try {
+      const res = await axios.patch(
+        `http://localhost:5000/admin/inquiries/${id}/status`,
+        { status }
+      );
+      return res.data.updated;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
 const adminInquiriesSlice = createSlice({
   name: "adminInquiries",
   initialState,
@@ -95,6 +114,17 @@ const adminInquiriesSlice = createSlice({
         );
       })
       .addCase(deleteAdminInquiry.rejected, (state, action) => {
+        state.error = action.payload as string;
+      })
+      // 수정
+      .addCase(patchInquiryStatus.fulfilled, (state, action) => {
+        const updated = action.payload;
+        const idx = state.inquiries.findIndex((i) => i.id === updated.id);
+        if (idx !== -1) {
+          state.inquiries[idx] = updated;
+        }
+      })
+      .addCase(patchInquiryStatus.rejected, (state, action) => {
         state.error = action.payload as string;
       });
   },
