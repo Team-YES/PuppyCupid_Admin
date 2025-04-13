@@ -1,11 +1,13 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 import getUserInfoReducer from "@/reducers/getUserInfo";
 import getReportsReducer from "@/reducers/getAdminReports";
+import getInquiriesReducer from "@/reducers/getAdminInquiries";
 
 export const store = configureStore({
   reducer: {
     adminUsers: getUserInfoReducer,
     adminReports: getReportsReducer,
+    admminInquiries: getInquiriesReducer,
   },
 });
 

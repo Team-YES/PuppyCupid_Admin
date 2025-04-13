@@ -37,3 +37,24 @@ export const formatReportType = (type: string) => {
       return "기타";
   }
 };
+
+// 문의유형 포맷
+export const formatInquiryType = (type: string) => {
+  switch (type) {
+    case "service":
+      return "환불 문의";
+    case "bug":
+      return "신고 문의";
+    default:
+      return "기타 문의";
+  }
+};
+
+export const formatStatus = (type: string) => {
+  switch (type) {
+    case "pending":
+      return "진행중";
+    default:
+      return "완료";
+  }
+};

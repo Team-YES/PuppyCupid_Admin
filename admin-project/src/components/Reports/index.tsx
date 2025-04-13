@@ -18,7 +18,7 @@ const FILTER_OPTIONS = [
   { label: "전체", value: "all" },
   { label: "게시글 신고", value: "post" },
   { label: "댓글 신고", value: "comment" },
-  { label: "유저 신고", value: "user" }, // 아직 존재하지 않아도 향후 확장 대비
+  { label: "유저 신고", value: "user" },
 ];
 
 // 신고 정보
