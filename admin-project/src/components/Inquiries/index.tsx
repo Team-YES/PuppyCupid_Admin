@@ -3,14 +3,19 @@ import { InquiryCompStyled } from "./styled";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { useEffect, useState } from "react";
-import { getAdminInquiries, Inquiry } from "@/reducers/getAdminInquiries";
+import {
+  getAdminInquiries,
+  Inquiry,
+  deleteAdminInquiry,
+} from "@/reducers/getAdminInquiries";
 import { Cell } from "../UserInfo/styled";
 import {
   formatInquiryType,
   formatKoreanDate,
   formatPhone,
+  formatStatus,
 } from "@/utill/format";
-import { Button, Select } from "antd";
+import { Button, Modal, Select } from "antd";
 
 interface TitleProps {
   title: string;
@@ -40,8 +45,37 @@ const InquiriesComp = ({ title, button }: TitleProps) => {
   );
 
   const [info, setInfo] = useState<Inquiry[]>([]);
-  console.log("문의정보", info);
   const [filterType, setFilterType] = useState<string>("all");
+
+  console.log("문의정보", info);
+
+  // 문의 정보 및 모달 상태
+  const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = (inquiry: Inquiry) => {
+    setSelectedInquiry(inquiry);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedInquiry(null);
+  };
+
+  // 문의 삭제
+  const handleDeleteInquiry = async (id: number) => {
+    const confirmDelete = window.confirm("해당 문의를 정말 삭제하시겠습니까?");
+    if (!confirmDelete) return;
+
+    try {
+      await dispatch(deleteAdminInquiry(id)).unwrap();
+      alert("삭제가 완료되었습니다.");
+    } catch (error) {
+      alert("삭제 중 오류가 발생했습니다.");
+      console.error("삭제 실패:", error);
+    }
+  };
 
   // 필터 적용 및 정렬
   useEffect(() => {
@@ -67,8 +101,9 @@ const InquiriesComp = ({ title, button }: TitleProps) => {
     "상태",
     "등록일",
     "보기",
+    "삭제",
   ];
-  const flexValues = [1, 1, 1, 1.5, 1.5, 1, 1.5, 1];
+  const flexValues = [1, 1, 1, 1.5, 1.5, 1, 1.5, 1, 1];
 
   return (
     <InquiryCompStyled className={clsx("Inquiries")}>
@@ -103,16 +138,54 @@ const InquiriesComp = ({ title, button }: TitleProps) => {
             data.name,
             data.user.email,
             formatPhone(data.user.phone),
-            data.status,
+            formatStatus(data.status),
             formatKoreanDate(data.created_at),
             "보기",
+            "삭제",
           ].map((cell, colIdx) => (
             <Cell key={colIdx} $flex={flexValues[colIdx]}>
-              {colIdx === 7 ? <Button>{cell}</Button> : cell}
+              {colIdx === 7 ? (
+                <Button onClick={() => handleOpenModal(data)}>{cell}</Button>
+              ) : colIdx === 8 ? (
+                <Button danger onClick={() => handleDeleteInquiry(data.id)}>
+                  {cell}
+                </Button>
+              ) : (
+                cell
+              )}
             </Cell>
           ))}
         </div>
       ))}
+
+      {/* '보기' 모달 */}
+      <Modal
+        title={`문의 상세 보기 - #${selectedInquiry?.id}`}
+        open={isModalOpen}
+        onCancel={handleCloseModal}
+        footer={[
+          <Button key="close" type="primary" onClick={handleCloseModal}>
+            닫기
+          </Button>,
+        ]}
+      >
+        <p>
+          <strong>문의자:</strong> {selectedInquiry?.name}
+        </p>
+        <p>
+          <strong>이메일:</strong> {selectedInquiry?.email}
+        </p>
+        <p>
+          <strong>문의유형:</strong>{" "}
+          {formatInquiryType(selectedInquiry?.type || "")}
+        </p>
+        <p>
+          <strong>문의일:</strong>{" "}
+          {formatKoreanDate(selectedInquiry?.created_at || "")}
+        </p>
+        <hr />
+        <p style={{ whiteSpace: "pre-wrap" }}>{selectedInquiry?.content}</p>
+      </Modal>
     </InquiryCompStyled>
   );
 };

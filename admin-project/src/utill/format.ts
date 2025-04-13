@@ -18,6 +18,8 @@ export const formatPhone = (phone?: string): string => {
 
 // 연/월/일/시간 포맷 (한국 시간 기준)
 export const formatKoreanDate = (dateStr: string): string => {
+  if (!dateStr) return "-";
+
   const timeZone = "Asia/Seoul";
   const date = new Date(dateStr);
   const zonedDate = toZonedTime(date, timeZone);

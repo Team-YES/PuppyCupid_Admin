@@ -39,6 +39,7 @@ const initialState: AdminInquiriesState = {
   error: null,
 };
 
+// 문의 데이터 받기 thunk
 export const getAdminInquiries = createAsyncThunk<Inquiry[]>(
   "adminInquiries/getAdminInquiries",
   async (_, { rejectWithValue }) => {
@@ -48,6 +49,22 @@ export const getAdminInquiries = createAsyncThunk<Inquiry[]>(
       return res.data.inquiries;
     } catch (error: any) {
       console.error("문의 목록 요청 실패:", error);
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+// 문의 삭제 thunk
+export const deleteAdminInquiry = createAsyncThunk<number, number>(
+  "adminInquiries/deleteAdminInquiry",
+  async (inquiryId, { rejectWithValue }) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:5000/admin/inquiries/${inquiryId}`
+      );
+      return res.data;
+    } catch (error: any) {
+      console.error("문의 삭제 실패:", error);
       return rejectWithValue(error.response?.data || error.message);
     }
   }
@@ -69,6 +86,15 @@ const adminInquiriesSlice = createSlice({
       })
       .addCase(getAdminInquiries.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.payload as string;
+      })
+      // 삭제
+      .addCase(deleteAdminInquiry.fulfilled, (state, action) => {
+        state.inquiries = state.inquiries.filter(
+          (inquiry) => inquiry.id !== action.payload
+        );
+      })
+      .addCase(deleteAdminInquiry.rejected, (state, action) => {
         state.error = action.payload as string;
       });
   },
