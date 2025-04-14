@@ -51,6 +51,9 @@ const DailyPaymentChart = ({ payments }: Props) => {
           type: "line",
           data: totals,
           smooth: true,
+          itemStyle: {
+            color: "#eb57ff",
+          },
         },
       ],
     };
