@@ -45,7 +45,7 @@ const InquiriesComp = ({ title, button }: TitleProps) => {
 
   // 조회
   const inquiryData = useSelector(
-    (state: RootState) => state.admminInquiries.inquiries
+    (state: RootState) => state.adminInquiries.inquiries
   );
 
   // 데이터 저장

@@ -7,7 +7,7 @@ export const store = configureStore({
   reducer: {
     adminUsers: getUserInfoReducer,
     adminReports: getReportsReducer,
-    admminInquiries: getInquiriesReducer,
+    adminInquiries: getInquiriesReducer,
   },
 });
 
