@@ -13,5 +13,6 @@ export const ReportsCompStyled = styled.div`
     align-items: center;
     border-bottom: 1px solid #ddd;
     padding: 10px 0;
+    cursor: pointer;
   }
 `;

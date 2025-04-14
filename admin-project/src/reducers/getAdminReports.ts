@@ -9,13 +9,16 @@ export interface Report {
   created_at: string;
   reporter: {
     id: number;
-    name: string;
     nickName: string;
     email: string;
-    phone: string;
-    provider: string; // e.g., "naver"
-    role: string;
-    isPhoneVerified: boolean;
+  };
+  targetInfo: {
+    commentId?: number;
+    content?: number;
+    postId?: number;
+    nickName: string;
+    email: string;
+    userId: number;
   };
 }
 

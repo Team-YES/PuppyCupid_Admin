@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Report, getAdminReports } from "@/reducers/getAdminReports";
 import { Cell } from "../UserInfo/styled";
 import { formatKoreanDate, formatReportType } from "@/utill/format";
-import { Select } from "antd";
+import { Select, Modal, Button } from "antd";
 import PaginationWrapper from "@/components/Pagination";
 
 interface TitleProps {
@@ -68,17 +68,30 @@ const ReportsComp = ({ title, button }: TitleProps) => {
   //   setInfo(reportData); // Redux 데이터 → 로컬 상태 복사
   // }, [reportData]);
 
+  // 모달 보기
+  const [selectedReport, setSelectedReport] = useState<Report | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = (report: Report) => {
+    setSelectedReport(report);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedReport(null);
+    setIsModalOpen(false);
+  };
+
   // 테이블 헤더
   const headerLabels = [
-    "신고번호",
-    "유형",
     "신고대상 ID",
+    "닉네임",
+    "유형",
     "신고자",
-    "이메일",
     "사유",
     "신고일",
   ];
-  const flexValues = [1, 1, 1, 1, 1.5, 1.5, 1.5];
+  const flexValues = [1, 1, 1, 1, 1.5, 1.5];
 
   return (
     <ReportsCompStyled className={clsx("Reports")}>
@@ -105,32 +118,19 @@ const ReportsComp = ({ title, button }: TitleProps) => {
       </div>
 
       {/* 테이블 내용 */}
-      {/* {info.map((data, rowIdx) => (
-        <div className="Reports_table" key={rowIdx}>
-          {[
-            data.id,
-            formatReportType(data.reportType),
-            data.targetId,
-            data.reporter.nickName,
-            data.reporter.email,
-            data.reason,
-            formatKoreanDate(data.created_at),
-          ].map((cell, colIdx) => (
-            <Cell key={colIdx} $flex={flexValues[colIdx]}>
-              {cell}
-            </Cell>
-          ))}
-        </div>
-      ))} */}
-
       {paginatedData.map((data, rowIdx) => (
-        <div className="Reports_table" key={rowIdx}>
+        <div
+          className="Reports_table"
+          key={rowIdx}
+          onClick={() => {
+            handleOpenModal(data);
+          }}
+        >
           {[
-            data.id,
+            data.targetInfo.userId,
+            data.targetInfo.nickName,
             formatReportType(data.reportType),
-            data.targetId,
             data.reporter.nickName,
-            data.reporter.email,
             data.reason,
             formatKoreanDate(data.created_at),
           ].map((cell, colIdx) => (
@@ -147,6 +147,64 @@ const ReportsComp = ({ title, button }: TitleProps) => {
         total={info.length}
         onChange={setCurrentPage}
       />
+
+      {/* 신고내용 보기 모달 */}
+      <Modal
+        title={`신고 상세 보기 - #${selectedReport?.id}`}
+        open={isModalOpen}
+        onCancel={handleCloseModal}
+        footer={[
+          <Button key="close" type="primary" onClick={handleCloseModal}>
+            닫기
+          </Button>,
+        ]}
+      >
+        <p>
+          <strong>신고 대상 ID:</strong> {selectedReport?.targetInfo.userId}
+        </p>
+        <p>
+          <strong>신고 대상 닉네임:</strong>{" "}
+          {selectedReport?.targetInfo.nickName}
+        </p>
+        <p>
+          <strong>신고 유형:</strong>{" "}
+          {formatReportType(selectedReport?.reportType || "")}
+        </p>
+        <p>
+          <strong>신고자:</strong> {selectedReport?.reporter.nickName}
+        </p>
+
+        <p>
+          <strong>신고일:</strong>{" "}
+          {formatKoreanDate(selectedReport?.created_at || "")}
+        </p>
+        <p>
+          <strong>신고 사유:</strong> {selectedReport?.reason}
+        </p>
+
+        <hr />
+
+        {/* 조건부 내용 출력 */}
+        {selectedReport?.reportType === "post" && (
+          <p>
+            <strong>게시글 내용:</strong>
+            <br />
+            {selectedReport?.targetInfo.content || "내용 없음"}
+          </p>
+        )}
+        {selectedReport?.reportType === "comment" && (
+          <p>
+            <strong>댓글 내용:</strong>
+            <br />
+            {selectedReport?.targetInfo.content || "내용 없음"}
+          </p>
+        )}
+        {selectedReport?.reportType === "user" && (
+          <p style={{ fontStyle: "italic", color: "#888" }}>
+            신고 내용이 없습니다.
+          </p>
+        )}
+      </Modal>
     </ReportsCompStyled>
   );
 };
