@@ -6,6 +6,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
+import { ConfigProvider } from "antd";
 import { store } from "@/store/store";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
@@ -44,12 +45,22 @@ export default function App({ Component, pageProps }: AppProps) {
         <NotPc />
       ) : (
         <>
-          <Header />
-          <Provider store={store}>
-            <Template>
-              <Component {...pageProps} />
-            </Template>
-          </Provider>
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimary: "#9855f3",
+                colorLink: "#72ff3a",
+                // colorTextBase: "#172bff",
+              },
+            }}
+          >
+            <Header />
+            <Provider store={store}>
+              <Template>
+                <Component {...pageProps} />
+              </Template>
+            </Provider>
+          </ConfigProvider>
         </>
       )}
     </>

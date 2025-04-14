@@ -33,7 +33,9 @@ const Header = ({ className }: HeaderProps) => {
     >
       <div className="navigation">
         <div className="left">
-          <Link href="/">소개팅 ADMIN PAGE</Link>
+          <Link href="/">
+            <i className="fa-solid fa-paw"></i> 소개팅 ADMIN PAGE
+          </Link>
         </div>
       </div>
     </HeaderStyled>

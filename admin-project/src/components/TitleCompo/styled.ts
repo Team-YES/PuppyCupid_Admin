@@ -10,4 +10,8 @@ export const TitleCompoStyled = styled.div`
     display: flex;
     flex-wrap: wrap;
   }
+
+  .Dashboard_cont {
+    margin: 10px 0 15px 0;
+  }
 `;

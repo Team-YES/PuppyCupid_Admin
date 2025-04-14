@@ -3,6 +3,7 @@ import getUserInfoReducer from "@/reducers/getUserInfo";
 import getReportsReducer from "@/reducers/getAdminReports";
 import getInquiriesReducer from "@/reducers/getAdminInquiries";
 import getPaymentReducer from "@/reducers/getPayment";
+import getAllPostsReducer from "@/reducers/getAllPostsCount";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     adminReports: getReportsReducer,
     adminInquiries: getInquiriesReducer,
     adminPayment: getPaymentReducer,
+    adminAllPosts: getAllPostsReducer,
   },
 });
 

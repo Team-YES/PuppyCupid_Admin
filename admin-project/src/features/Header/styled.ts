@@ -5,9 +5,10 @@ export const HeaderStyled = styled.div`
     display: none;
   }
   color: white;
-  background: #2196f3;
+  background: #ccb6fd;
   padding: 20px;
   height: 64px;
+  font-weight: bolder;
   /* border-bottom: 1px solid #333; */
   .navigation {
     font-size: 1.25rem;

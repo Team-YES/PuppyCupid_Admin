@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { useEffect, useState } from "react";
 import { Report, getAdminReports } from "@/reducers/getAdminReports";
+import { addBlacklistUser } from "@/reducers/getBlackList";
 import { Cell } from "../UserInfo/styled";
 import { formatKoreanDate, formatReportType } from "@/utill/format";
-import { Select, Modal, Button } from "antd";
+import { Select, Modal, Button, Input, message } from "antd";
 import PaginationWrapper from "@/components/Pagination";
 
 interface TitleProps {
@@ -68,7 +69,7 @@ const ReportsComp = ({ title, button }: TitleProps) => {
   //   setInfo(reportData); // Redux 데이터 → 로컬 상태 복사
   // }, [reportData]);
 
-  // 모달 보기
+  // 신고 상세 모달 보기
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -80,6 +81,34 @@ const ReportsComp = ({ title, button }: TitleProps) => {
   const handleCloseModal = () => {
     setSelectedReport(null);
     setIsModalOpen(false);
+  };
+
+  // 블랙리스트 모달
+  const [isBlacklistModalOpen, setIsBlacklistModalOpen] = useState(false);
+  const [blacklistReason, setBlacklistReason] = useState("");
+
+  const handleAddToBlacklist = async () => {
+    if (!selectedReport?.targetInfo.userId || !blacklistReason.trim()) {
+      message.warning("사유를 입력해주세요.");
+      return;
+    }
+
+    try {
+      await dispatch(
+        addBlacklistUser({
+          userId: selectedReport.targetInfo.userId,
+          reason: blacklistReason,
+        })
+      ).unwrap();
+
+      message.success("블랙리스트에 추가되었습니다.");
+      setIsBlacklistModalOpen(false);
+      setIsModalOpen(false);
+      setBlacklistReason("");
+    } catch (err) {
+      message.error("추가에 실패했습니다.");
+      console.error(err);
+    }
   };
 
   // 테이블 헤더
@@ -154,7 +183,15 @@ const ReportsComp = ({ title, button }: TitleProps) => {
         open={isModalOpen}
         onCancel={handleCloseModal}
         footer={[
-          <Button key="close" type="primary" onClick={handleCloseModal}>
+          <Button
+            key="markResolved"
+            type="primary"
+            style={{ backgroundColor: "black" }}
+            onClick={() => setIsBlacklistModalOpen(true)}
+          >
+            블랙리스트 추가
+          </Button>,
+          <Button key="close" type="default" onClick={handleCloseModal}>
             닫기
           </Button>,
         ]}
@@ -203,6 +240,31 @@ const ReportsComp = ({ title, button }: TitleProps) => {
             신고 내용이 없습니다.
           </p>
         )}
+      </Modal>
+
+      {/* 블랙리스트 모달 */}
+      <Modal
+        title="블랙리스트 사유 입력"
+        open={isBlacklistModalOpen}
+        onCancel={() => setIsBlacklistModalOpen(false)}
+        onOk={handleAddToBlacklist}
+        cancelText="취소"
+        okText="추가"
+        okButtonProps={{
+          style: { backgroundColor: "black", borderColor: "black" },
+          type: "primary",
+        }}
+      >
+        <p>
+          <strong>대상 닉네임:</strong>{" "}
+          {selectedReport?.targetInfo.nickName || "알 수 없음"}
+        </p>
+        <Input.TextArea
+          rows={4}
+          placeholder="블랙리스트 추가 사유를 입력해주세요."
+          value={blacklistReason}
+          onChange={(e) => setBlacklistReason(e.target.value)}
+        />
       </Modal>
     </ReportsCompStyled>
   );
