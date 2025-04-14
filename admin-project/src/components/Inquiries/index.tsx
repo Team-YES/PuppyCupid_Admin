@@ -14,10 +14,12 @@ import {
   formatInquiryType,
   formatKoreanDate,
   formatPhone,
+  formatReportType,
   formatStatus,
 } from "@/utill/format";
 import { Button, Modal, Select, message } from "antd";
 import { showConfirmModal } from "@/lib/confirmModal";
+import PaginationWrapper from "@/components/Pagination";
 
 interface TitleProps {
   title: string;
@@ -46,6 +48,7 @@ const InquiriesComp = ({ title, button }: TitleProps) => {
     (state: RootState) => state.admminInquiries.inquiries
   );
 
+  // 데이터 저장
   const [info, setInfo] = useState<Inquiry[]>([]);
   const [filterType, setFilterType] = useState<string>("all");
 
@@ -126,6 +129,15 @@ const InquiriesComp = ({ title, button }: TitleProps) => {
     setInfo(filtered);
   }, [inquiryData, filterType]);
 
+  // 페이지네이션 계산
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10; // 페이지당 항목 수
+
+  const paginatedData = info.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
   // 테이블 헤더
   const headerLabels = [
     "문의번호",
@@ -165,7 +177,7 @@ const InquiriesComp = ({ title, button }: TitleProps) => {
       </div>
 
       {/* 테이블 내용 */}
-      {info.map((data, rowIdx) => (
+      {paginatedData.map((data, rowIdx) => (
         <div className="Inquiries_table" key={rowIdx}>
           {[
             data.id,
@@ -192,6 +204,13 @@ const InquiriesComp = ({ title, button }: TitleProps) => {
           ))}
         </div>
       ))}
+
+      {/* 페이지네이션 */}
+      <PaginationWrapper
+        currentPage={currentPage}
+        total={info.length}
+        onChange={setCurrentPage}
+      />
 
       {/* '보기' 모달 */}
       <Modal

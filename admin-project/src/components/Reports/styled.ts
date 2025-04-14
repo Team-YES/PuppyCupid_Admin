@@ -12,6 +12,6 @@ export const ReportsCompStyled = styled.div`
     display: flex;
     align-items: center;
     border-bottom: 1px solid #ddd;
-    padding: 8px 0;
+    padding: 10px 0;
   }
 `;

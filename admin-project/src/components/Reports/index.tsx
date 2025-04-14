@@ -7,6 +7,7 @@ import { Report, getAdminReports } from "@/reducers/getAdminReports";
 import { Cell } from "../UserInfo/styled";
 import { formatKoreanDate, formatReportType } from "@/utill/format";
 import { Select } from "antd";
+import PaginationWrapper from "@/components/Pagination";
 
 interface TitleProps {
   title: string;
@@ -39,6 +40,15 @@ const ReportsComp = ({ title, button }: TitleProps) => {
   const [filterType, setFilterType] = useState<string>("all");
 
   console.log("신고정보", info);
+
+  // 페이지네이션 계산
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10; // 페이지당 항목 수
+
+  const paginatedData = info.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   // 필터 적용 및 정렬
   useEffect(() => {
@@ -95,7 +105,25 @@ const ReportsComp = ({ title, button }: TitleProps) => {
       </div>
 
       {/* 테이블 내용 */}
-      {info.map((data, rowIdx) => (
+      {/* {info.map((data, rowIdx) => (
+        <div className="Reports_table" key={rowIdx}>
+          {[
+            data.id,
+            formatReportType(data.reportType),
+            data.targetId,
+            data.reporter.nickName,
+            data.reporter.email,
+            data.reason,
+            formatKoreanDate(data.created_at),
+          ].map((cell, colIdx) => (
+            <Cell key={colIdx} $flex={flexValues[colIdx]}>
+              {cell}
+            </Cell>
+          ))}
+        </div>
+      ))} */}
+
+      {paginatedData.map((data, rowIdx) => (
         <div className="Reports_table" key={rowIdx}>
           {[
             data.id,
@@ -112,6 +140,13 @@ const ReportsComp = ({ title, button }: TitleProps) => {
           ))}
         </div>
       ))}
+
+      {/* 페이지네이션 */}
+      <PaginationWrapper
+        currentPage={currentPage}
+        total={info.length}
+        onChange={setCurrentPage}
+      />
     </ReportsCompStyled>
   );
 };
