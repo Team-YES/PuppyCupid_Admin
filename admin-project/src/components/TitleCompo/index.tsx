@@ -5,9 +5,11 @@ import ExampleChart from "@/components/InquiryChart";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { getAdminInquiries, Inquiry } from "@/reducers/getAdminInquiries";
-import { useEffect, useState } from "react";
 import { AdminUser, fetchAdminUsers } from "@/reducers/getUserInfo";
+import { getAdminPayments, Payment } from "@/reducers/getPayment";
+import { useEffect, useState } from "react";
 import { getThisWeekJoinCount } from "@/utill/getThisWeekJoin";
+import DailyPaymentChart from "@/components/PaymentChart";
 
 interface TitleProps {
   title: string;
@@ -22,6 +24,7 @@ const TitleCompo = ({ title, button }: TitleProps) => {
   useEffect(() => {
     dispatch(getAdminInquiries()); // 문의 정보
     dispatch(fetchAdminUsers()); // 유저 정보
+    dispatch(getAdminPayments()); // 결제 정보
   }, [dispatch]);
 
   // 조회
@@ -29,22 +32,28 @@ const TitleCompo = ({ title, button }: TitleProps) => {
     (state: RootState) => state.adminInquiries.inquiries
   ); // 문의 정보
   const users = useSelector((state: RootState) => state.adminUsers.users); // 유저 정보
+  const payData = useSelector(
+    (state: RootState) => state.adminPayment.payments
+  );
 
   // 데이터 저장
   const [info, setInfo] = useState<Inquiry[]>([]);
   const [userInfo, setUserInfo] = useState<AdminUser[]>([]);
+  const [payInfo, setPayInfo] = useState<Payment[]>([]);
 
   console.log("대시보드 문의정보", info);
   console.log("대시보드 유저정보", userInfo);
+  console.log("대시보드 결제정보", payInfo);
 
   // 이번주 가입자 수
   const thisWeekJoinCount = getThisWeekJoinCount(userInfo);
-  console.log("이번주 가입자수", thisWeekJoinCount);
+  // console.log("이번주 가입자수", thisWeekJoinCount);
 
   useEffect(() => {
     setInfo(inquiryData); // 문의 정보
     setUserInfo(users); // 유저 정보
-  }, [inquiryData, users]);
+    setPayInfo(payData); // 결제 정보
+  }, [inquiryData, users, payData]);
 
   return (
     <TitleCompoStyled className={clsx("title-compo")}>
@@ -66,6 +75,11 @@ const TitleCompo = ({ title, button }: TitleProps) => {
         {/* 문의 차트 */}
         <div style={{ width: 400 }}>
           <ExampleChart info={info} />
+        </div>
+
+        {/* 결제 차트 */}
+        <div style={{ width: 450 }}>
+          <DailyPaymentChart payments={payInfo} />
         </div>
       </div>
     </TitleCompoStyled>

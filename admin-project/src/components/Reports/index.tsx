@@ -173,7 +173,6 @@ const ReportsComp = ({ title, button }: TitleProps) => {
         <p>
           <strong>신고자:</strong> {selectedReport?.reporter.nickName}
         </p>
-
         <p>
           <strong>신고일:</strong>{" "}
           {formatKoreanDate(selectedReport?.created_at || "")}
