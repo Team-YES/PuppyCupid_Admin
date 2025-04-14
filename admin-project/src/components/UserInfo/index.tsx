@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { formatGender, formatPhone, formatKoreanDate } from "@/utill/format";
 import { showConfirmModal } from "@/lib/confirmModal";
+import PaginationWrapper from "@/components/Pagination";
 
 interface TitleProps {
   title: string;
@@ -35,6 +36,15 @@ const UserInfo = ({ title, button }: TitleProps) => {
   }, [users]);
 
   console.log("유저 정보", info);
+
+  // 페이지네이션 계산
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10; // 페이지당 항목 수
+
+  const paginatedData = info.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   // 테이블 헤더
   const headerLabels = [
@@ -79,7 +89,7 @@ const UserInfo = ({ title, button }: TitleProps) => {
       </div>
 
       {/* 테이블 내용 */}
-      {info.map((data, rowIdx) => (
+      {paginatedData.map((data, rowIdx) => (
         <div className="userInfo_table" key={rowIdx}>
           {[
             data.id,
@@ -101,6 +111,13 @@ const UserInfo = ({ title, button }: TitleProps) => {
           ))}
         </div>
       ))}
+
+      {/* 페이지네이션 */}
+      <PaginationWrapper
+        currentPage={currentPage}
+        total={info.length}
+        onChange={setCurrentPage}
+      />
     </UserInfoStyled>
   );
 };
