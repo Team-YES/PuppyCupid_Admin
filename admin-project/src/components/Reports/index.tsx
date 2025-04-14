@@ -113,6 +113,7 @@ const ReportsComp = ({ title, button }: TitleProps) => {
 
   // 테이블 헤더
   const headerLabels = [
+    "번호",
     "신고대상 ID",
     "닉네임",
     "유형",
@@ -120,7 +121,7 @@ const ReportsComp = ({ title, button }: TitleProps) => {
     "사유",
     "신고일",
   ];
-  const flexValues = [1, 1, 1, 1, 1.5, 1.5];
+  const flexValues = [1, 1, 1, 1, 1, 1.5, 1.5];
 
   return (
     <ReportsCompStyled className={clsx("Reports")}>
@@ -156,6 +157,7 @@ const ReportsComp = ({ title, button }: TitleProps) => {
           }}
         >
           {[
+            data.id,
             data.targetInfo.userId,
             data.targetInfo.nickName,
             formatReportType(data.reportType),
