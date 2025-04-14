@@ -5,4 +5,9 @@ export const TitleCompoStyled = styled.div`
     /* font-size: 20px; */
     /* font-weight: bolder; */
   }
+
+  .Dashboard_Wrap {
+    display: flex;
+    flex-wrap: wrap;
+  }
 `;

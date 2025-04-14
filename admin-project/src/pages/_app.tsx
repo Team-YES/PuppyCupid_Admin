@@ -7,6 +7,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 // Component, pageProps : App컴포넌트를 호출할 때 자동으로 넘겨주는 값
 export default function App({ Component, pageProps }: AppProps) {

@@ -13,6 +13,9 @@ const ExampleChart = ({ info }: Props) => {
   useEffect(() => {
     if (!chartRef.current) return;
 
+    // 기존 인스턴스가 존재하면 제거
+    echarts.dispose(chartRef.current);
+
     const chartInstance = echarts.init(chartRef.current);
 
     // 1. 유형별 개수 집계
@@ -30,7 +33,7 @@ const ExampleChart = ({ info }: Props) => {
     // 차트 옵션 세팅
     const option = {
       title: {
-        text: "문의 유형 분포",
+        text: "문의 유형 통계",
         left: "center",
       },
       tooltip: {
@@ -60,15 +63,15 @@ const ExampleChart = ({ info }: Props) => {
     chartInstance.setOption(option);
 
     // 💡 사이즈 변경 대응
-    const handleResize = () => {
-      chartInstance.resize();
-    };
-    window.addEventListener("resize", handleResize);
+    // const handleResize = () => {
+    //   chartInstance.resize();
+    // };
+    // window.addEventListener("resize", handleResize);
 
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      chartInstance.dispose(); // 정리
-    };
+    // return () => {
+    //   window.removeEventListener("resize", handleResize);
+    //   chartInstance.dispose(); // 정리
+    // };
   }, [info]);
 
   return <div ref={chartRef} style={{ width: "100%", height: "400px" }} />;
