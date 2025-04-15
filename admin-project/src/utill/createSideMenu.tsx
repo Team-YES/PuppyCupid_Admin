@@ -48,6 +48,10 @@ export const sidebarMenus = createSidebarMenus([
         key: "/users/inquiries",
         label: "문의 정보",
       },
+      {
+        key: "/users/blackList",
+        label: "블랙리스트 관리",
+      },
     ],
   },
 ]);

@@ -2,10 +2,32 @@ import { LoginFeatStyled } from "./styled";
 import { Form, Input, Button } from "antd";
 
 const LoginFeat = () => {
-  const onFinish = (values: { email: string; password: string }) => {
+  const onFinish = (values: { id: string; password: string }) => {
     console.log("로그인 정보:", values);
     // 로그인 요청 처리
   };
+
+  // const onFinish = async (values: { email: string; password: string }) => {
+  //   try {
+  //     const response = await axios.post("http://localhost:5000/auth/login", {
+  //       email: values.email,
+  //       password: values.password,
+  //     });
+
+  //     const { accessToken } = response.data;
+
+  //     if (accessToken) {
+  //       localStorage.setItem("token", accessToken); // ✅ 토큰 저장 (또는 cookie 등)
+  //       message.success("로그인 성공");
+  //       router.push("/dashboard"); // ✅ 로그인 후 이동할 페이지
+  //     } else {
+  //       message.error("로그인에 실패했습니다");
+  //     }
+  //   } catch (err: any) {
+  //     console.error("로그인 실패:", err);
+  //     message.error("아이디 또는 비밀번호가 올바르지 않습니다");
+  //   }
+  // };
 
   return (
     <LoginFeatStyled>
@@ -25,7 +47,7 @@ const LoginFeat = () => {
         >
           <Form.Item
             // label="아이디"
-            name="email"
+            name="id"
             rules={[{ required: true, message: "아이디를 입력해주세요" }]}
           >
             <Input placeholder="아이디를 입력하세요." />
