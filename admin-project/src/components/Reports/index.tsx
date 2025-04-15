@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { useEffect, useState } from "react";
 import { Report, getAdminReports } from "@/reducers/getAdminReports";
-import { addBlacklistUser } from "@/reducers/getBlackList";
+import { addBlacklistUser, getBlacklist } from "@/reducers/getBlackList";
 import { Cell } from "../UserInfo/styled";
 import { formatKoreanDate, formatReportType } from "@/utill/format";
 import { Select, Modal, Button, Input, message } from "antd";
@@ -92,9 +92,23 @@ const ReportsComp = ({ title, button }: TitleProps) => {
   const [isBlacklistModalOpen, setIsBlacklistModalOpen] = useState(false);
   const [blacklistReason, setBlacklistReason] = useState("");
 
+  // 블랙리스트 조회
+  const blackList = useSelector((state: RootState) => state.blacklist.list);
+
   const handleAddToBlacklist = async () => {
+    // 사유가 비어있을때
     if (!selectedReport?.targetInfo.userId || !blacklistReason.trim()) {
       message.warning("사유를 입력해주세요.");
+      return;
+    }
+    // 중복 아이디 체크
+    const isAlreadyBlacklisted = blackList.some((user) => {
+      console.log("ddd", user.id, selectedReport.targetInfo.userId);
+      user.id === selectedReport?.targetInfo.userId;
+    });
+
+    if (isAlreadyBlacklisted) {
+      message.warning("이미 블랙리스트에 등록된 사용자입니다.");
       return;
     }
 
@@ -153,33 +167,29 @@ const ReportsComp = ({ title, button }: TitleProps) => {
       </div>
 
       {/* 테이블 내용 */}
-      {paginatedData.map((data, rowIdx) => {
-        // if (!data.targetInfo) return null; // ❗ targetInfo가 없으면 렌더링 안함
-
-        return (
-          <div
-            className="Reports_table"
-            key={rowIdx}
-            onClick={() => {
-              handleOpenModal(data);
-            }}
-          >
-            {[
-              data.id,
-              data.targetInfo?.userId,
-              data.targetInfo?.nickName,
-              formatReportType(data.reportType),
-              data.reporter.nickName,
-              data.reason,
-              formatKoreanDate(data.created_at),
-            ].map((cell, colIdx) => (
-              <Cell key={colIdx} $flex={flexValues[colIdx]}>
-                {cell}
-              </Cell>
-            ))}
-          </div>
-        );
-      })}
+      {paginatedData.map((data, rowIdx) => (
+        <div
+          className="Reports_table"
+          key={rowIdx}
+          onClick={() => {
+            handleOpenModal(data);
+          }}
+        >
+          {[
+            data.id,
+            data.targetInfo?.userId,
+            data.targetInfo?.nickName,
+            formatReportType(data.reportType),
+            data.reporter.nickName,
+            data.reason,
+            formatKoreanDate(data.created_at),
+          ].map((cell, colIdx) => (
+            <Cell key={colIdx} $flex={flexValues[colIdx]}>
+              {cell}
+            </Cell>
+          ))}
+        </div>
+      ))}
 
       {/* 페이지네이션 */}
       <PaginationWrapper
