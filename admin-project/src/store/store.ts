@@ -6,6 +6,7 @@ import getPaymentReducer from "@/reducers/getPayment";
 import getAllPostsReducer from "@/reducers/getAllPostsCount";
 import deletePostByAdmin from "@/reducers/deletePost";
 import deleteCommentByAdmin from "@/reducers/deleteComment";
+import getDailyActivityReducer from "@/reducers/getDailyActivity";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     adminAllPosts: getAllPostsReducer,
     adminDeletePost: deletePostByAdmin,
     adminDeleteComment: deleteCommentByAdmin,
+    adminDailyActivity: getDailyActivityReducer,
   },
 });
 
