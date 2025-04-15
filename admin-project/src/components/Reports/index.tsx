@@ -32,6 +32,7 @@ const ReportsComp = ({ title, button }: TitleProps) => {
   // 최초 마운트 시 데이터 불러오기
   useEffect(() => {
     dispatch(getAdminReports());
+    dispatch(getBlacklist());
   }, [dispatch]);
 
   // 조회
@@ -95,6 +96,8 @@ const ReportsComp = ({ title, button }: TitleProps) => {
   // 블랙리스트 조회
   const blackList = useSelector((state: RootState) => state.blacklist.list);
 
+  console.log("blackList", blackList);
+
   const handleAddToBlacklist = async () => {
     // 사유가 비어있을때
     if (!selectedReport?.targetInfo.userId || !blacklistReason.trim()) {
@@ -103,7 +106,6 @@ const ReportsComp = ({ title, button }: TitleProps) => {
     }
     // 중복 아이디 체크
     const isAlreadyBlacklisted = blackList.some((user) => {
-      console.log("ddd", user.id, selectedReport.targetInfo.userId);
       user.id === selectedReport?.targetInfo.userId;
     });
 

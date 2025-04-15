@@ -2,10 +2,14 @@ import { BlackListStyled } from "./styled";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
-import { BlacklistedUser, getBlacklist } from "@/reducers/getBlackList";
+import {
+  BlacklistedUser,
+  getBlacklist,
+  removeBlacklistUser,
+} from "@/reducers/getBlackList";
 import { Cell } from "../UserInfo/styled";
 import PaginationWrapper from "@/components/Pagination";
-import { Button } from "antd";
+import { Button, message, Modal } from "antd";
 import { formatKoreanDate } from "@/utill/format";
 
 interface TitleProps {
@@ -29,6 +33,33 @@ const BlackListComp = ({ title, button }: TitleProps) => {
   useEffect(() => {
     setInfo(blackList); // Redux 데이터 → 로컬 상태 복사
   }, [blackList]);
+
+  // 블랙리스트 삭제
+  const handleRemoveBlacklist = (userId: number) => {
+    Modal.confirm({
+      title: "정말 해제하시겠습니까?",
+      content: "이 사용자를 블랙리스트에서 제거합니다.",
+      okText: "네, 해제합니다",
+      cancelText: "취소",
+      okButtonProps: {
+        style: {
+          backgroundColor: "black",
+          borderColor: "black",
+          color: "white",
+        },
+      },
+      onOk: async () => {
+        try {
+          await dispatch(removeBlacklistUser(userId)).unwrap();
+          message.success("블랙리스트에서 해제되었습니다.");
+        } catch (err) {
+          message.error(
+            typeof err === "string" ? err : "블랙리스트 해제에 실패했습니다."
+          );
+        }
+      },
+    });
+  };
 
   // 페이지네이션 계산
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,11 +99,7 @@ const BlackListComp = ({ title, button }: TitleProps) => {
           ].map((cell, colIdx) => (
             <Cell key={colIdx} $flex={flexValues[colIdx]}>
               {colIdx === 3 ? (
-                <Button
-                  onClick={() => {
-                    console.log(1);
-                  }}
-                >
+                <Button onClick={() => handleRemoveBlacklist(data.id)}>
                   {cell}
                 </Button>
               ) : (

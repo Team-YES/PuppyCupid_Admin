@@ -68,6 +68,30 @@ export const getBlacklist = createAsyncThunk<
   }
 });
 
+// 블랙리스트 삭제(일반유저 전환)
+export const removeBlacklistUser = createAsyncThunk<
+  { userId: number }, // 성공 시 반환값: 삭제한 userId
+  number, // 전달 인자: userId
+  { rejectValue: string }
+>("blacklist/removeUser", async (userId, { rejectWithValue }) => {
+  try {
+    const res = await axios.delete(
+      `http://localhost:5000/admin/blacklist/${userId}`,
+      { withCredentials: true }
+    );
+
+    if (!res.data?.ok) {
+      return rejectWithValue("블랙리스트 해제 실패 (응답 실패)");
+    }
+    console.log("블랙리스트 삭제", res.data);
+    return res.data; // 성공 시 삭제된 ID 반환
+  } catch (error: any) {
+    return rejectWithValue(
+      error.response?.data?.message || "블랙리스트 해제 실패"
+    );
+  }
+});
+
 // Slice
 const blacklistSlice = createSlice({
   name: "blacklist",
@@ -105,6 +129,23 @@ const blacklistSlice = createSlice({
         state.list = action.payload;
       })
       .addCase(getBlacklist.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // 블랙리스트 삭제
+      .addCase(removeBlacklistUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(removeBlacklistUser.fulfilled, (state, action) => {
+        state.loading = false;
+        // list에서 해당 유저 제거
+        state.list = state.list.filter(
+          (user) => user.id !== action.payload.userId
+        );
+      })
+      .addCase(removeBlacklistUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

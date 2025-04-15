@@ -50,15 +50,16 @@ const UserInfo = ({ title, button }: TitleProps) => {
   const headerLabels = [
     "ID",
     "이름",
+    "닉네임",
     "성별",
     "이메일",
     "휴대전화번호",
     "가입일",
     "회원탈퇴",
   ];
-  const flexValues = [1, 1, 1, 1.5, 1.5, 1.5, 1];
+  const flexValues = [1, 1, 1, 1, 1.5, 1.5, 1.5, 1];
 
-  // 유저 삭제
+  // 유저 삭제  9855f3
   const handleDelete = (userId: number) => {
     showConfirmModal({
       title: "회원 삭제",
@@ -94,7 +95,7 @@ const UserInfo = ({ title, button }: TitleProps) => {
           {[
             data.id,
             data.name ? data.name : "-",
-
+            data.nickName,
             formatGender(data.gender),
             data.email,
             formatPhone(data.phone),
@@ -102,8 +103,14 @@ const UserInfo = ({ title, button }: TitleProps) => {
             "회원탈퇴",
           ].map((cell, colIdx) => (
             <Cell key={colIdx} $flex={flexValues[colIdx]}>
-              {colIdx === 6 ? (
-                <Button onClick={() => handleDelete(data.id)}>{cell}</Button>
+              {colIdx === 7 ? (
+                data.nickName === "관리자" ? (
+                  <span style={{ color: "#9855f3", fontWeight: 600 }}>
+                    관리자<i className="fa-solid fa-crown"></i>
+                  </span>
+                ) : (
+                  <Button onClick={() => handleDelete(data.id)}>{cell}</Button>
+                )
               ) : (
                 cell
               )}
