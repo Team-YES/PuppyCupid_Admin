@@ -1,33 +1,45 @@
+import axios from "axios";
 import { LoginFeatStyled } from "./styled";
 import { Form, Input, Button } from "antd";
+import { useRouter } from "next/router";
 
 const LoginFeat = () => {
-  const onFinish = (values: { id: string; password: string }) => {
-    console.log("로그인 정보:", values);
-    // 로그인 요청 처리
-  };
-
-  // const onFinish = async (values: { email: string; password: string }) => {
-  //   try {
-  //     const response = await axios.post("http://localhost:5000/auth/login", {
-  //       email: values.email,
-  //       password: values.password,
-  //     });
-
-  //     const { accessToken } = response.data;
-
-  //     if (accessToken) {
-  //       localStorage.setItem("token", accessToken); // ✅ 토큰 저장 (또는 cookie 등)
-  //       message.success("로그인 성공");
-  //       router.push("/dashboard"); // ✅ 로그인 후 이동할 페이지
-  //     } else {
-  //       message.error("로그인에 실패했습니다");
-  //     }
-  //   } catch (err: any) {
-  //     console.error("로그인 실패:", err);
-  //     message.error("아이디 또는 비밀번호가 올바르지 않습니다");
-  //   }
+  const router = useRouter();
+  // const onFinish = (values: { id: string; password: string }) => {
+  //   console.log("로그인 정보:", values);
+  //   // 로그인 요청 처리
   // };
+
+  const onFinish = async (values: { id: string; password: string }) => {
+    console.log("로그인 정보:", values);
+
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/auth/adminLogin",
+        {
+          id: values.id,
+          password: values.password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      // const { accessToken } = res.data;
+      console.log("로그인 성공", res.data);
+
+      // if (accessToken) {
+      //   localStorage.setItem("token", accessToken); // ✅ 토큰 저장
+      //   message.success("관리자 로그인 성공");
+      //   router.push("/dashboard"); // ✅ 로그인 후 이동할 페이지
+      // } else {
+      //   message.error("로그인에 실패했습니다");
+      // }
+    } catch (err: any) {
+      console.error("로그인 실패:", err);
+      // message.error("아이디 또는 비밀번호가 올바르지 않습니다");
+    }
+  };
 
   return (
     <LoginFeatStyled>
