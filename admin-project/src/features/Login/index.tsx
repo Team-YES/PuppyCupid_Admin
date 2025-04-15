@@ -5,11 +5,8 @@ import { useRouter } from "next/router";
 
 const LoginFeat = () => {
   const router = useRouter();
-  // const onFinish = (values: { id: string; password: string }) => {
-  //   console.log("로그인 정보:", values);
-  //   // 로그인 요청 처리
-  // };
 
+  // 로그인 정보 전송
   const onFinish = async (values: { id: string; password: string }) => {
     console.log("로그인 정보:", values);
 
@@ -25,19 +22,12 @@ const LoginFeat = () => {
         }
       );
 
-      // const { accessToken } = res.data;
-      console.log("로그인 성공", res.data);
-
-      // if (accessToken) {
-      //   localStorage.setItem("token", accessToken); // ✅ 토큰 저장
-      //   message.success("관리자 로그인 성공");
-      //   router.push("/dashboard"); // ✅ 로그인 후 이동할 페이지
-      // } else {
-      //   message.error("로그인에 실패했습니다");
-      // }
+      if (res.data.ok) {
+        console.log("로그인 성공", res.data);
+        router.push("/");
+      }
     } catch (err: any) {
       console.error("로그인 실패:", err);
-      // message.error("아이디 또는 비밀번호가 올바르지 않습니다");
     }
   };
 

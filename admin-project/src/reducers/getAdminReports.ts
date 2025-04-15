@@ -38,7 +38,9 @@ export const getAdminReports = createAsyncThunk(
   "adminReports/getAdminReports",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:5000/admin/reports");
+      const res = await axios.get("http://localhost:5000/admin/reports", {
+        withCredentials: true,
+      });
 
       // console.log("신고reducer", res.data);
       return res.data.reports;

@@ -21,7 +21,10 @@ export const deletePostByAdmin = createAsyncThunk<
 >("admin/deletePostByAdmin", async (postId, { rejectWithValue }) => {
   try {
     const res = await axios.delete(
-      `http://localhost:5000/admin/posts/${postId}`
+      `http://localhost:5000/admin/posts/${postId}`,
+      {
+        withCredentials: true,
+      }
     );
     console.log(res.data);
     return { postId };

@@ -29,7 +29,9 @@ export const getAdminPayments = createAsyncThunk<Payment[]>(
   "adminPayments/getAdminPayments",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:5000/admin/payments");
+      const res = await axios.get("http://localhost:5000/admin/payments", {
+        withCredentials: true,
+      });
       console.log(res.data);
       return res.data.payments;
     } catch (error: any) {

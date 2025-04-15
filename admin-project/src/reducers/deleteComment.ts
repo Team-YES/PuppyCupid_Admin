@@ -25,7 +25,10 @@ export const deleteCommentByAdmin = createAsyncThunk<
 >("admin/deleteCommentByAdmin", async (commentId, { rejectWithValue }) => {
   try {
     const response = await axios.delete(
-      `http://localhost:5000/admin/comments/${commentId}`
+      `http://localhost:5000/admin/comments/${commentId}`,
+      {
+        withCredentials: true,
+      }
     );
     if (response.data.ok) {
       return { commentId };

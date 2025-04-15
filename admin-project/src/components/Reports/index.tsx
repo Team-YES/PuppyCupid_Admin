@@ -71,6 +71,9 @@ const ReportsComp = ({ title, button }: TitleProps) => {
   //   setInfo(reportData); // Redux 데이터 → 로컬 상태 복사
   // }, [reportData]);
 
+  // 삭제된 게시물 아이디 기억
+  const [deletedPostIds, setDeletedPostIds] = useState<number[]>([]);
+
   // 신고 상세 모달 보기
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -150,29 +153,33 @@ const ReportsComp = ({ title, button }: TitleProps) => {
       </div>
 
       {/* 테이블 내용 */}
-      {paginatedData.map((data, rowIdx) => (
-        <div
-          className="Reports_table"
-          key={rowIdx}
-          onClick={() => {
-            handleOpenModal(data);
-          }}
-        >
-          {[
-            data.id,
-            data.targetInfo.userId,
-            data.targetInfo.nickName,
-            formatReportType(data.reportType),
-            data.reporter.nickName,
-            data.reason,
-            formatKoreanDate(data.created_at),
-          ].map((cell, colIdx) => (
-            <Cell key={colIdx} $flex={flexValues[colIdx]}>
-              {cell}
-            </Cell>
-          ))}
-        </div>
-      ))}
+      {paginatedData.map((data, rowIdx) => {
+        // if (!data.targetInfo) return null; // ❗ targetInfo가 없으면 렌더링 안함
+
+        return (
+          <div
+            className="Reports_table"
+            key={rowIdx}
+            onClick={() => {
+              handleOpenModal(data);
+            }}
+          >
+            {[
+              data.id,
+              data.targetInfo?.userId,
+              data.targetInfo?.nickName,
+              formatReportType(data.reportType),
+              data.reporter.nickName,
+              data.reason,
+              formatKoreanDate(data.created_at),
+            ].map((cell, colIdx) => (
+              <Cell key={colIdx} $flex={flexValues[colIdx]}>
+                {cell}
+              </Cell>
+            ))}
+          </div>
+        );
+      })}
 
       {/* 페이지네이션 */}
       <PaginationWrapper
@@ -193,6 +200,9 @@ const ReportsComp = ({ title, button }: TitleProps) => {
               key="deletePost"
               danger
               style={{ marginRight: 170 }}
+              disabled={deletedPostIds.includes(
+                selectedReport?.targetInfo.postId!
+              )}
               onClick={async () => {
                 if (!selectedReport?.targetInfo.postId) {
                   message.warning("postId가 없습니다.");
@@ -203,6 +213,20 @@ const ReportsComp = ({ title, button }: TitleProps) => {
                   await dispatch(
                     deletePostByAdmin(selectedReport.targetInfo.postId)
                   ).unwrap();
+
+                  setDeletedPostIds((prev) => [
+                    ...prev,
+                    selectedReport.targetInfo.postId!,
+                  ]);
+
+                  setInfo((prev) =>
+                    prev.filter(
+                      (report) =>
+                        report.targetInfo?.postId !==
+                        selectedReport.targetInfo.postId
+                    )
+                  );
+
                   message.success("게시글이 삭제되었습니다.");
                   setIsModalOpen(false);
                 } catch (err) {
@@ -211,7 +235,9 @@ const ReportsComp = ({ title, button }: TitleProps) => {
                 }
               }}
             >
-              게시글 삭제
+              {deletedPostIds.includes(selectedReport?.targetInfo.postId!)
+                ? "게시글 삭제 완료"
+                : "게시글 삭제"}
             </Button>
           ),
           // 댓글 삭제 버튼 (댓글 신고일 때만)

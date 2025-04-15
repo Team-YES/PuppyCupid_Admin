@@ -19,9 +19,15 @@ export const addBlacklistUser = createAsyncThunk<
   { userId: number; reason: string }
 >("blacklist/addUser", async ({ userId, reason }, { rejectWithValue }) => {
   try {
-    await axios.post(`http://localhost:5000/admin/blacklist/${userId}`, {
-      reason,
-    });
+    await axios.post(
+      `http://localhost:5000/admin/blacklist/${userId}`,
+      {
+        reason,
+      },
+      {
+        withCredentials: true,
+      }
+    );
   } catch (error: any) {
     return rejectWithValue(error.response?.data || error.message);
   }

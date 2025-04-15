@@ -23,7 +23,9 @@ export const getAdminPostsCount = createAsyncThunk<number>(
   "adminPostsCount/getAdminPostsCount",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:5000/admin/postsCount");
+      const res = await axios.get("http://localhost:5000/admin/postsCount", {
+        withCredentials: true,
+      });
       return res.data.count;
     } catch (error: any) {
       console.error("게시글 개수 요청 실패:", error);
