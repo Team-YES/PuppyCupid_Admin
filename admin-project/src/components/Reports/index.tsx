@@ -9,6 +9,8 @@ import { Cell } from "../UserInfo/styled";
 import { formatKoreanDate, formatReportType } from "@/utill/format";
 import { Select, Modal, Button, Input, message } from "antd";
 import PaginationWrapper from "@/components/Pagination";
+import { deletePostByAdmin } from "@/reducers/deletePost";
+import { deleteCommentByAdmin } from "@/reducers/deleteComment";
 
 interface TitleProps {
   title: string;
@@ -185,6 +187,60 @@ const ReportsComp = ({ title, button }: TitleProps) => {
         open={isModalOpen}
         onCancel={handleCloseModal}
         footer={[
+          // 게시글 삭제 버튼 (게시글 신고일 때만)
+          selectedReport?.reportType === "post" && (
+            <Button
+              key="deletePost"
+              danger
+              style={{ marginRight: 170 }}
+              onClick={async () => {
+                if (!selectedReport?.targetInfo.postId) {
+                  message.warning("postId가 없습니다.");
+                  return;
+                }
+
+                try {
+                  await dispatch(
+                    deletePostByAdmin(selectedReport.targetInfo.postId)
+                  ).unwrap();
+                  message.success("게시글이 삭제되었습니다.");
+                  setIsModalOpen(false);
+                } catch (err) {
+                  console.error(err);
+                  message.error("게시글 삭제 오류");
+                }
+              }}
+            >
+              게시글 삭제
+            </Button>
+          ),
+          // 댓글 삭제 버튼 (댓글 신고일 때만)
+          selectedReport?.reportType === "comment" && (
+            <Button
+              key="deleteComment"
+              danger
+              style={{ marginRight: 182 }}
+              onClick={async () => {
+                if (!selectedReport?.targetInfo.commentId) {
+                  message.warning("commentId가 없습니다.");
+                  return;
+                }
+                try {
+                  await dispatch(
+                    deleteCommentByAdmin(selectedReport.targetInfo.commentId)
+                  ).unwrap();
+                  message.success("댓글이 삭제되었습니다.");
+                  setIsModalOpen(false);
+                } catch (err) {
+                  console.error(err);
+                  message.error("댓글 삭제 실패");
+                }
+              }}
+            >
+              댓글 삭제
+            </Button>
+          ),
+          // 블랙리스트 추가 버튼
           <Button
             key="markResolved"
             type="primary"

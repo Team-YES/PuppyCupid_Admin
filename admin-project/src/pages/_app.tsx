@@ -9,10 +9,14 @@ import { Provider } from "react-redux";
 import { ConfigProvider } from "antd";
 import { store } from "@/store/store";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import { useRouter } from "next/router";
 
 // Component, pageProps : App컴포넌트를 호출할 때 자동으로 넘겨주는 값
 export default function App({ Component, pageProps }: AppProps) {
   const [notPc, setNotPc] = useState(false);
+  const router = useRouter();
+
+  const isLoginPage = router.pathname === "/login"; // 현재 라우터 경로 체크
 
   useEffect(() => {
     const handleResize = () => {
@@ -49,16 +53,22 @@ export default function App({ Component, pageProps }: AppProps) {
             theme={{
               token: {
                 colorPrimary: "#9855f3",
-                colorLink: "#72ff3a",
+                // colorLink: "#72ff3a",
                 // colorTextBase: "#172bff",
               },
             }}
           >
-            <Header />
             <Provider store={store}>
-              <Template>
+              {isLoginPage ? (
                 <Component {...pageProps} />
-              </Template>
+              ) : (
+                <>
+                  <Header />
+                  <Template>
+                    <Component {...pageProps} />
+                  </Template>
+                </>
+              )}
             </Provider>
           </ConfigProvider>
         </>

@@ -3,6 +3,13 @@ import styled from "styled-components";
 export const LoginFeatStyled = styled.div`
   border: 1px solid #ddd;
   border-radius: 8px;
+  margin: 0 auto;
+  margin-top: 200px;
+  width: 500px;
+
+  .Login_container {
+    width: 100%;
+  }
 
   .Login_header {
     font-size: 1.5rem;
