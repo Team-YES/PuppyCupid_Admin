@@ -12,6 +12,8 @@ import PaginationWrapper from "@/components/Pagination";
 import { deletePostByAdmin } from "@/reducers/deletePost";
 import { deleteCommentByAdmin } from "@/reducers/deleteComment";
 
+const { confirm } = Modal;
+
 interface TitleProps {
   title: string;
   button?: string;
@@ -71,9 +73,6 @@ const ReportsComp = ({ title, button }: TitleProps) => {
   // useEffect(() => {
   //   setInfo(reportData); // Redux 데이터 → 로컬 상태 복사
   // }, [reportData]);
-
-  // 삭제된 게시물 아이디 기억
-  const [deletedPostIds, setDeletedPostIds] = useState<number[]>([]);
 
   // 신고 상세 모달 보기
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
@@ -212,44 +211,37 @@ const ReportsComp = ({ title, button }: TitleProps) => {
               key="deletePost"
               danger
               style={{ marginRight: 170 }}
-              disabled={deletedPostIds.includes(
-                selectedReport?.targetInfo.postId!
-              )}
-              onClick={async () => {
+              onClick={() => {
                 if (!selectedReport?.targetInfo.postId) {
                   message.warning("postId가 없습니다.");
                   return;
                 }
 
-                try {
-                  await dispatch(
-                    deletePostByAdmin(selectedReport.targetInfo.postId)
-                  ).unwrap();
-
-                  setDeletedPostIds((prev) => [
-                    ...prev,
-                    selectedReport.targetInfo.postId!,
-                  ]);
-
-                  setInfo((prev) =>
-                    prev.filter(
-                      (report) =>
-                        report.targetInfo?.postId !==
-                        selectedReport.targetInfo.postId
-                    )
-                  );
-
-                  message.success("게시글이 삭제되었습니다.");
-                  setIsModalOpen(false);
-                } catch (err) {
-                  console.error(err);
-                  message.error("게시글 삭제 오류");
-                }
+                confirm({
+                  title: "게시글 삭제 확인",
+                  content: "정말로 해당 게시글을 삭제하시겠습니까?",
+                  okText: "삭제",
+                  cancelText: "취소",
+                  okButtonProps: {
+                    danger: true,
+                  },
+                  async onOk() {
+                    try {
+                      await dispatch(
+                        deletePostByAdmin(selectedReport.targetInfo.postId!)
+                      ).unwrap();
+                      message.success("게시글이 삭제되었습니다.");
+                      await dispatch(getAdminReports());
+                      setIsModalOpen(false);
+                    } catch (err) {
+                      console.error(err);
+                      message.error("게시글 삭제 오류");
+                    }
+                  },
+                });
               }}
             >
-              {deletedPostIds.includes(selectedReport?.targetInfo.postId!)
-                ? "게시글 삭제 완료"
-                : "게시글 삭제"}
+              게시글 삭제
             </Button>
           ),
           // 댓글 삭제 버튼 (댓글 신고일 때만)
@@ -258,21 +250,36 @@ const ReportsComp = ({ title, button }: TitleProps) => {
               key="deleteComment"
               danger
               style={{ marginRight: 182 }}
-              onClick={async () => {
+              onClick={() => {
                 if (!selectedReport?.targetInfo.commentId) {
                   message.warning("commentId가 없습니다.");
                   return;
                 }
-                try {
-                  await dispatch(
-                    deleteCommentByAdmin(selectedReport.targetInfo.commentId)
-                  ).unwrap();
-                  message.success("댓글이 삭제되었습니다.");
-                  setIsModalOpen(false);
-                } catch (err) {
-                  console.error(err);
-                  message.error("댓글 삭제 실패");
-                }
+
+                confirm({
+                  title: "댓글 삭제 확인",
+                  content: "정말로 해당 댓글을 삭제하시겠습니까?",
+                  okText: "삭제",
+                  cancelText: "취소",
+                  okButtonProps: {
+                    danger: true,
+                  },
+                  async onOk() {
+                    try {
+                      await dispatch(
+                        deleteCommentByAdmin(
+                          selectedReport.targetInfo.commentId!
+                        )
+                      ).unwrap();
+                      message.success("댓글이 삭제되었습니다.");
+                      await dispatch(getAdminReports());
+                      setIsModalOpen(false);
+                    } catch (err) {
+                      console.error(err);
+                      message.error("댓글 삭제 실패");
+                    }
+                  },
+                });
               }}
             >
               댓글 삭제

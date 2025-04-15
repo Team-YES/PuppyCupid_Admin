@@ -105,7 +105,7 @@ const UserInfo = ({ title, button }: TitleProps) => {
             <Cell key={colIdx} $flex={flexValues[colIdx]}>
               {colIdx === 7 ? (
                 data.nickName === "관리자" ? (
-                  <span style={{ color: "#9855f3", fontWeight: 600 }}>
+                  <span style={{ color: "#9855f3", fontWeight: 700 }}>
                     관리자<i className="fa-solid fa-crown"></i>
                   </span>
                 ) : (
