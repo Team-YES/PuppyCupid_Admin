@@ -17,7 +17,7 @@ const LoginFeat = () => {
       const res = await axios.post(
         "http://localhost:5000/auth/adminLogin",
         {
-          id: values.id,
+          email: values.id,
           password: values.password,
         },
         {
