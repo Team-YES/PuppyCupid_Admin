@@ -1,6 +1,11 @@
 import UserInfo from "@/components/UserInfo";
+import PrivateRoute from "@/components/PrivateRoute";
 
 const UserManage = () => {
-  return <UserInfo title={"회원 정보"} />;
+  return (
+    <PrivateRoute>
+      <UserInfo title={"회원 정보"} />
+    </PrivateRoute>
+  );
 };
 export default UserManage;
