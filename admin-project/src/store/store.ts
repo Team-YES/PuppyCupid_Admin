@@ -8,6 +8,7 @@ import deletePostByAdmin from "@/reducers/deletePost";
 import deleteCommentByAdmin from "@/reducers/deleteComment";
 import blacklistReducer from "@/reducers/getBlackList";
 import getDailyActivityReducer from "@/reducers/getDailyActivity";
+import userReducer from "./slices/userSlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     adminDeleteComment: deleteCommentByAdmin,
     blacklist: blacklistReducer,
     adminDailyActivity: getDailyActivityReducer,
+    user: userReducer,
   },
 });
 

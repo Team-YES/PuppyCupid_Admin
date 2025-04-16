@@ -1,5 +1,6 @@
+import type { AppDispatch } from "@/store/store";
 import { useDispatch } from "react-redux";
-
+import { setReduxUser, logoutUser } from "@/store/slices/userSlice";
 import React, {
   createContext,
   useContext,
@@ -10,16 +11,16 @@ import React, {
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useRouter } from "next/router";
-import axiosInstance from "@/lib/axios";
 
-type UserInfo = {
+type UserState = {
+  id: number;
   email: string;
-  password: string | null;
+  password?: string | null;
 };
 
 type AuthContextType = {
   isLoggedIn: boolean;
-  user: UserInfo | null;
+  user: UserState | null;
   checkLogin: () => void;
   login: () => void;
   logout: () => void;
@@ -37,63 +38,60 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState<UserInfo | null>(null);
+  const [user, setUser] = useState<UserState | null>(null);
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+
   // 서버에서 로그인 상태를 확인하는 함수
   const checkLogin = async () => {
     try {
       const token = Cookies.get("access_token");
-      const tempToken = Cookies.get("temp_access_token"); // 쿠키에서 토큰을 가져옵니다.
-      if (!token && tempToken) {
-        router.push("/phone");
-        setIsLoggedIn(false);
-        setUser(null);
-        return;
-      }
 
-      const response = await axiosInstance.get("/auth/check");
+      const response = await axios.get(
+        "http://localhost:5000/auth/adminCheck",
+        {
+          withCredentials: true,
+        }
+      );
 
       if (response.data.isLoggedIn) {
         setIsLoggedIn(true);
 
-        const userData: UserInfo = {
+        const userData: UserState = {
           id: response.data.user.id,
-          password: response.data.user.email,
+          email: response.data.user.email,
+          password: null,
         };
-        setUser(userData);
+        setUser(userData); // ✅ 이건 AuthContext 내부 state에 사용
+
+        const userDataForRedux = {
+          id: Number(response.data.user.id),
+          email: String(response.data.user.email),
+        };
+
+        dispatch(setReduxUser(userDataForRedux)); // ✅ 이건 Redux 전용으로 타입 맞춰서 전송
       } else {
         setIsLoggedIn(false);
         setUser(null);
+        dispatch(logoutUser());
       }
     } catch (error) {
       setIsLoggedIn(false);
       setUser(null);
+      dispatch(logoutUser());
     }
   };
 
-  // 로그아웃 함수
-  // const logout = async () => {
-  //   try {
-  //     await axiosInstance.get("/auth/logout");
-  //     // Cookies.remove("access_token"); // 쿠키에서 토큰 삭제
-  //     // Cookies.remove("eid_refresh_token"); // 쿠키에서 토큰 삭제
-
-  //     setIsLoggedIn(false);
-  //     setUser(null); // 추가중
-  //     dispatch(logoutUser()); // 추가중
-  //   } catch (error) {
-  //     console.error("로그아웃 오류:", error);
-  //   }
-  // };
-
-  // 로그인 상태 확인
   useEffect(() => {
     checkLogin();
   }, []);
 
+  const login = () => {};
+  const logout = () => {};
+
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, user, checkLogin, login: () => {}, logout }}
+      value={{ isLoggedIn, user, checkLogin, login, logout }}
     >
       {children}
     </AuthContext.Provider>
