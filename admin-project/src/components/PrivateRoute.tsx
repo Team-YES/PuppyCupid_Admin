@@ -16,7 +16,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setCheckingAuth(false);
-    }, 500);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
