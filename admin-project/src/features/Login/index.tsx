@@ -8,7 +8,7 @@ const LoginFeat = () => {
 
   // 로그인 정보 전송
   const onFinish = async (values: { id: string; password: string }) => {
-    // console.log("로그인 정보:", values);
+    console.log("로그인 정보:", values);
 
     try {
       const res = await axios.post(
