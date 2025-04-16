@@ -105,7 +105,7 @@ const ReportsComp = ({ title, button }: TitleProps) => {
     }
     // 중복 아이디 체크
     const isAlreadyBlacklisted = blackList.some((user) => {
-      user.id === selectedReport?.targetInfo.userId;
+      return user.targetUserId === selectedReport?.targetInfo.userId;
     });
 
     if (isAlreadyBlacklisted) {

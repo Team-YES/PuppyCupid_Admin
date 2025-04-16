@@ -52,6 +52,7 @@ const BlackListComp = ({ title, button }: TitleProps) => {
         try {
           await dispatch(removeBlacklistUser(userId)).unwrap();
           message.success("블랙리스트에서 해제되었습니다.");
+          dispatch(getBlacklist());
         } catch (err) {
           message.error(
             typeof err === "string" ? err : "블랙리스트 해제에 실패했습니다."
@@ -99,7 +100,9 @@ const BlackListComp = ({ title, button }: TitleProps) => {
           ].map((cell, colIdx) => (
             <Cell key={colIdx} $flex={flexValues[colIdx]}>
               {colIdx === 3 ? (
-                <Button onClick={() => handleRemoveBlacklist(data.id)}>
+                <Button
+                  onClick={() => handleRemoveBlacklist(data.targetUserId)}
+                >
                   {cell}
                 </Button>
               ) : (

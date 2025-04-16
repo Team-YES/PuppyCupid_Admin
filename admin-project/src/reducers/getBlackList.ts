@@ -5,6 +5,7 @@ export interface BlacklistedUser {
   id: number;
   reason: string;
   created_at: string;
+  targetUserId: number;
 }
 
 interface BlacklistState {
@@ -59,7 +60,7 @@ export const getBlacklist = createAsyncThunk<
     const res = await axios.get("http://localhost:5000/admin/blacklist", {
       withCredentials: true,
     });
-    // console.log("블랙리스트 조회 reducer", res.data);
+    console.log("블랙리스트 조회 reducer", res.data);
     return res.data.blacklists;
   } catch (error: any) {
     return rejectWithValue(
