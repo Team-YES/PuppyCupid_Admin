@@ -10,7 +10,6 @@ import React, {
 } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { useRouter } from "next/router";
 
 type UserState = {
   id: number;
@@ -21,6 +20,7 @@ type UserState = {
 type AuthContextType = {
   isLoggedIn: boolean;
   user: UserState | null;
+  loading: boolean; // ✅ 추가
   checkLogin: () => void;
   login: () => void;
   logout: () => void;
@@ -39,10 +39,9 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<UserState | null>(null);
-  const router = useRouter();
+  const [loading, setLoading] = useState(true); // ✅ 추가
   const dispatch = useDispatch<AppDispatch>();
 
-  // 서버에서 로그인 상태를 확인하는 함수
   const checkLogin = async () => {
     try {
       const token = Cookies.get("access_token");
@@ -62,14 +61,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           email: response.data.user.email,
           password: null,
         };
-        setUser(userData); // ✅ 이건 AuthContext 내부 state에 사용
+        setUser(userData);
 
-        const userDataForRedux = {
-          id: Number(response.data.user.id),
-          email: String(response.data.user.email),
-        };
-
-        dispatch(setReduxUser(userDataForRedux)); // ✅ 이건 Redux 전용으로 타입 맞춰서 전송
+        dispatch(
+          setReduxUser({
+            id: Number(response.data.user.id),
+            email: String(response.data.user.email),
+          })
+        );
       } else {
         setIsLoggedIn(false);
         setUser(null);
@@ -79,6 +78,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsLoggedIn(false);
       setUser(null);
       dispatch(logoutUser());
+    } finally {
+      setLoading(false); // ✅ 로그인 여부 확인이 끝났을 때만 false
     }
   };
 
@@ -91,7 +92,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, user, checkLogin, login, logout }}
+      value={{ isLoggedIn, user, loading, checkLogin, login, logout }}
     >
       {children}
     </AuthContext.Provider>
