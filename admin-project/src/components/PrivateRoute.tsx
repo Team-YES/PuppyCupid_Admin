@@ -11,25 +11,32 @@ interface PrivateRouteProps {
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const { isLoggedIn } = useAuth();
   const router = useRouter();
-  const [checkingAuth, setCheckingAuth] = useState(true); // 3초 동안 로딩 상태
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setCheckingAuth(false);
-      if (!isLoggedIn) {
-        alert("로그인이 필요합니다.");
-        router.push("/login");
-      }
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [isLoggedIn, router]);
+  }, []);
 
-  if (!isLoggedIn) {
-    return <Loading />; // 로딩 중일때 로딩 중 페이지 띄우기
+  useEffect(() => {
+    if (!checkingAuth && !isLoggedIn) {
+      alert("로그인이 필요합니다.");
+      router.push("/login");
+    }
+  }, [checkingAuth, isLoggedIn, router]);
+
+  if (checkingAuth) {
+    return <Loading />;
   }
 
-  return <>{children}</>; // 로그인된 경우 자식 컴포넌트 렌더링
+  if (!isLoggedIn) {
+    return null; // 위에서 푸시하고 있으니 아무것도 렌더 안 함
+  }
+
+  return <>{children}</>;
 };
 
 export default PrivateRoute;
