@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import TitleCompo from "@/components/TitleCompo";
@@ -6,7 +6,9 @@ import { DashStyled } from "./styled";
 
 const DashBoard = () => {
   const router = useRouter();
+  const alertedRef = useRef(false);
 
+  // 로그인 상태가 아닐 경우 /login으로 리다이렉트
   useEffect(() => {
     const checkAdminLogin = async () => {
       try {
@@ -18,15 +20,16 @@ const DashBoard = () => {
           }
         );
 
-        if (response.data.isLoggedIn) {
-          console.log("User is authenticated");
-        } else {
-          console.log("User is not authenticated, redirecting to login");
-          router.push("/login"); // 로그인 페이지로 리다이렉트
+        if (!response.data.isLoggedIn) {
+          if (!alertedRef.current) {
+            alert("로그인이 필요합니다.");
+            alertedRef.current = true;
+          }
+          router.push("/login");
         }
       } catch (error) {
-        console.log("Error during authentication check", error);
-        router.push("/login"); // 로그인 페이지로 리다이렉트
+        console.log("로그인 체크 에러", error);
+        router.push("/login");
       }
     };
 
