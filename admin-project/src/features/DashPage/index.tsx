@@ -14,7 +14,7 @@ const DashBoard = () => {
       try {
         // 서버에서 로그인 상태 확인
         const response = await axios.get(
-          "http://localhost:5000/auth/adminCheck",
+          "http://localhost:5001/auth/adminCheck",
           {
             withCredentials: true,
           }

@@ -34,7 +34,7 @@ export const addBlacklistUser = createAsyncThunk<
 >("blacklist/addUser", async ({ userId, reason }, { rejectWithValue }) => {
   try {
     const res = await axios.post(
-      `http://localhost:5000/admin/blacklist/${userId}`,
+      `http://localhost:5001/admin/blacklist/${userId}`,
       { reason },
       { withCredentials: true }
     );
@@ -57,7 +57,7 @@ export const getBlacklist = createAsyncThunk<
   { rejectValue: string }
 >("blacklist/getList", async (_, { rejectWithValue }) => {
   try {
-    const res = await axios.get("http://localhost:5000/admin/blacklist", {
+    const res = await axios.get("http://localhost:5001/admin/blacklist", {
       withCredentials: true,
     });
     console.log("블랙리스트 조회 reducer", res.data);
@@ -77,7 +77,7 @@ export const removeBlacklistUser = createAsyncThunk<
 >("blacklist/removeUser", async (userId, { rejectWithValue }) => {
   try {
     const res = await axios.delete(
-      `http://localhost:5000/admin/blacklist/${userId}`,
+      `http://localhost:5001/admin/blacklist/${userId}`,
       { withCredentials: true }
     );
 

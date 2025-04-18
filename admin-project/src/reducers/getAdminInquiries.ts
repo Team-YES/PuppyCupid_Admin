@@ -44,7 +44,7 @@ export const getAdminInquiries = createAsyncThunk<Inquiry[]>(
   "adminInquiries/getAdminInquiries",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:5000/admin/inquiries", {
+      const res = await axios.get("http://localhost:5001/admin/inquiries", {
         withCredentials: true,
       });
       // console.log("문의 reducer", res.data.inquiries);
@@ -62,7 +62,7 @@ export const deleteAdminInquiry = createAsyncThunk<number, number>(
   async (inquiryId, { rejectWithValue }) => {
     try {
       const res = await axios.delete(
-        `http://localhost:5000/admin/inquiries/${inquiryId}`,
+        `http://localhost:5001/admin/inquiries/${inquiryId}`,
         {
           withCredentials: true,
         }
@@ -84,7 +84,7 @@ export const patchInquiryStatus = createAsyncThunk<
   async ({ id, status }, { rejectWithValue }) => {
     try {
       const res = await axios.patch(
-        `http://localhost:5000/admin/inquiries/${id}/status`,
+        `http://localhost:5001/admin/inquiries/${id}/status`,
         { status },
         {
           withCredentials: true,

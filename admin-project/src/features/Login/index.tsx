@@ -12,7 +12,7 @@ const LoginFeat = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/auth/adminLogin",
+        "http://localhost:5001/auth/adminLogin",
         {
           email: values.id,
           password: values.password,

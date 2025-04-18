@@ -30,7 +30,7 @@ export const getServiceUsageStats = createAsyncThunk<UsageStat>(
   "adminDailyActivity/getServiceUsageStats",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:5000/admin/count", {
+      const res = await axios.get("http://localhost:5001/admin/count", {
         withCredentials: true,
       });
       console.log(res.data, "/??");

@@ -23,7 +23,7 @@ export const getAdminPostsCount = createAsyncThunk<number>(
   "adminPostsCount/getAdminPostsCount",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:5000/admin/postsCount", {
+      const res = await axios.get("http://localhost:5001/admin/postsCount", {
         withCredentials: true,
       });
       return res.data.count;

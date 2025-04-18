@@ -35,7 +35,7 @@ const initialState: AdminUserState = {
 export const fetchAdminUsers = createAsyncThunk(
   "admin/fetchUsers",
   async () => {
-    const res = await axios.get("http://localhost:5000/admin/users", {
+    const res = await axios.get("http://localhost:5001/admin/users", {
       withCredentials: true,
     });
     // console.log(res.data);
@@ -47,7 +47,7 @@ export const fetchAdminUsers = createAsyncThunk(
 export const deleteAdminUser = createAsyncThunk(
   "admin/deleteUser",
   async (userId: number, { dispatch }) => {
-    await axios.delete(`http://localhost:5000/admin/users/${userId}`, {
+    await axios.delete(`http://localhost:5001/admin/users/${userId}`, {
       withCredentials: true,
     });
     // 삭제 후 유저 목록 갱신

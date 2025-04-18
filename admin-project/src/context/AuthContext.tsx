@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const token = Cookies.get("access_token");
 
       const response = await axios.get(
-        "http://localhost:5000/auth/adminCheck",
+        "http://localhost:5001/auth/adminCheck",
         {
           withCredentials: true,
         }
