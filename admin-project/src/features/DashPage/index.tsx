@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import TitleCompo from "@/components/TitleCompo";
 import { DashStyled } from "./styled";
+import Cookies from "js-cookie";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -14,11 +15,18 @@ const DashBoard = () => {
   useEffect(() => {
     const checkAdminLogin = async () => {
       try {
+        // 쿠키에서 accessToken 가져오기
+        const token = Cookies.get("accessToken");
+
         // 서버에서 로그인 상태 확인
         const response = await axios.get(`${baseURL}/auth/adminCheck`, {
           withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
+        // 로그인이 안 된 경우
         if (!response.data.isLoggedIn) {
           if (!alertedRef.current) {
             alert("로그인이 필요합니다.");

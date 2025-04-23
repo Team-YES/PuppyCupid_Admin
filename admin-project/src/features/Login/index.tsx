@@ -2,6 +2,7 @@ import axios from "axios";
 import { LoginFeatStyled } from "./styled";
 import { Form, Input, Button } from "antd";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -27,7 +28,26 @@ const LoginFeat = () => {
 
       if (res.data.ok) {
         console.log("로그인 성공", res.data);
-        router.push("/");
+
+        const { accessToken, refreshToken } = res.data;
+
+        // accessToken 쿠키 저장 (1시간 유지 예시)
+        Cookies.set("accessToken", accessToken, {
+          expires: 1 / 24, // 1시간 (1일 ÷ 24)
+          path: "/",
+          secure: true, // HTTPS에서만 (운영 환경이라면 true 권장)
+          sameSite: "Strict", // CSRF 방지용 (필요 시 Lax 또는 None)
+        });
+
+        // refreshToken 쿠키 저장 (7일 유지 예시)
+        Cookies.set("refreshToken", refreshToken, {
+          expires: 7,
+          path: "/",
+          secure: true,
+          sameSite: "Strict",
+        });
+
+        // router.push("/");
       }
     } catch (err: any) {
       console.error("로그인 실패:", err);
