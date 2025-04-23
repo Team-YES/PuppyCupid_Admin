@@ -32,8 +32,13 @@ export const getAdminPayments = createAsyncThunk<Payment[]>(
   "adminPayments/getAdminPayments",
   async (_, { rejectWithValue }) => {
     try {
+      const token = Cookies.get("accessToken");
+
       const res = await axios.get(`${baseURL}/admin/payments`, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
+        },
       });
       console.log(res.data);
       return res.data.payments;

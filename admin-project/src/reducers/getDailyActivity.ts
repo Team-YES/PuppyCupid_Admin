@@ -33,8 +33,13 @@ export const getServiceUsageStats = createAsyncThunk<UsageStat>(
   "adminDailyActivity/getServiceUsageStats",
   async (_, { rejectWithValue }) => {
     try {
+      const token = Cookies.get("accessToken");
+
       const res = await axios.get(`${baseURL}/admin/count`, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
+        },
       });
       console.log(res.data, "/??");
       return res.data;

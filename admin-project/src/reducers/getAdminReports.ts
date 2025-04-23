@@ -41,8 +41,13 @@ export const getAdminReports = createAsyncThunk(
   "adminReports/getAdminReports",
   async (_, { rejectWithValue }) => {
     try {
+      const token = Cookies.get("accessToken");
+
       const res = await axios.get(`${baseURL}/admin/reports`, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
+        },
       });
 
       // console.log("신고reducer", res.data);

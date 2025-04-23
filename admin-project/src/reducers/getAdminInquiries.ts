@@ -69,10 +69,15 @@ export const deleteAdminInquiry = createAsyncThunk<number, number>(
   "adminInquiries/deleteAdminInquiry",
   async (inquiryId, { rejectWithValue }) => {
     try {
+      const token = Cookies.get("accessToken");
+
       const res = await axios.delete(
         `${baseURL}/admin/inquiries/${inquiryId}`,
         {
           withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
+          },
         }
       );
       return res.data;
@@ -91,11 +96,16 @@ export const patchInquiryStatus = createAsyncThunk<
   "adminInquiries/patchInquiryStatus",
   async ({ id, status }, { rejectWithValue }) => {
     try {
+      const token = Cookies.get("accessToken");
+
       const res = await axios.patch(
         `${baseURL}/admin/inquiries/${id}/status`,
         { status },
         {
           withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
+          },
         }
       );
       return res.data.updated;

@@ -38,8 +38,13 @@ const baseURL = process.env.NEXT_PUBLIC_API_URL;
 export const fetchAdminUsers = createAsyncThunk(
   "admin/fetchUsers",
   async () => {
+    const token = Cookies.get("accessToken");
+
     const res = await axios.get(`${baseURL}/admin/users`, {
       withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
+      },
     });
     // console.log(res.data);
     return res.data.users; // 보통 response.data.users 형태면 여기서 가공 가능
@@ -50,8 +55,13 @@ export const fetchAdminUsers = createAsyncThunk(
 export const deleteAdminUser = createAsyncThunk(
   "admin/deleteUser",
   async (userId: number, { dispatch }) => {
+    const token = Cookies.get("accessToken");
+
     await axios.delete(`${baseURL}/admin/users/${userId}`, {
       withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
+      },
     });
     // 삭제 후 유저 목록 갱신
     dispatch(fetchAdminUsers());

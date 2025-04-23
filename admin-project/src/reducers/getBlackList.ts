@@ -36,10 +36,17 @@ export const addBlacklistUser = createAsyncThunk<
   { rejectValue: string } // 실패 시 반환 타입
 >("blacklist/addUser", async ({ userId, reason }, { rejectWithValue }) => {
   try {
+    const token = Cookies.get("accessToken");
+
     const res = await axios.post(
       `${baseURL}/admin/blacklist/${userId}`,
       { reason },
-      { withCredentials: true }
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
+        },
+      }
     );
 
     if (!res.data?.ok) {
@@ -60,8 +67,13 @@ export const getBlacklist = createAsyncThunk<
   { rejectValue: string }
 >("blacklist/getList", async (_, { rejectWithValue }) => {
   try {
+    const token = Cookies.get("accessToken");
+
     const res = await axios.get(`${baseURL}/admin/blacklist`, {
       withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
+      },
     });
     console.log("블랙리스트 조회 reducer", res.data);
     return res.data.blacklists;
@@ -79,8 +91,13 @@ export const removeBlacklistUser = createAsyncThunk<
   { rejectValue: string }
 >("blacklist/removeUser", async (userId, { rejectWithValue }) => {
   try {
+    const token = Cookies.get("accessToken");
+
     const res = await axios.delete(`${baseURL}/admin/blacklist/${userId}`, {
       withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
+      },
     });
 
     if (!res.data?.ok) {

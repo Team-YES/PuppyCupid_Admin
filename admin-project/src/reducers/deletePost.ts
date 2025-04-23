@@ -23,8 +23,13 @@ export const deletePostByAdmin = createAsyncThunk<
   { rejectValue: string } // 실패 시 반환 타입
 >("admin/deletePostByAdmin", async (postId, { rejectWithValue }) => {
   try {
+    const token = Cookies.get("accessToken");
+
     const res = await axios.delete(`${baseURL}/admin/posts/${postId}`, {
       withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
+      },
     });
     console.log(res.data);
     return { postId };

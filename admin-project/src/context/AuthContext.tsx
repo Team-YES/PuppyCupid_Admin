@@ -50,6 +50,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       const response = await axios.get(`${baseURL}/auth/adminCheck`, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
+        },
       });
 
       if (response.data.isLoggedIn) {
