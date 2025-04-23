@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 export interface AllCount {
   count: number;
@@ -25,8 +26,13 @@ export const getAdminPostsCount = createAsyncThunk<number>(
   "adminPostsCount/getAdminPostsCount",
   async (_, { rejectWithValue }) => {
     try {
+      const token = Cookies.get("accessToken");
+
       const res = await axios.get(`${baseURL}/admin/postsCount`, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
+        },
       });
       return res.data.count;
     } catch (error: any) {

@@ -30,7 +30,6 @@ const LoginFeat = () => {
         console.log("로그인 성공", res.data);
 
         const { accessToken, refreshToken } = res.data;
-        console.log("accessToken", accessToken);
 
         // accessToken 쿠키 저장 (1시간 유지)
         Cookies.set("accessToken", accessToken, {

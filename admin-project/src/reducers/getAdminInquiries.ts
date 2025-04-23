@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 export interface InquiryUser {
   id: number;
@@ -46,8 +47,13 @@ export const getAdminInquiries = createAsyncThunk<Inquiry[]>(
   "adminInquiries/getAdminInquiries",
   async (_, { rejectWithValue }) => {
     try {
+      const token = Cookies.get("accessToken");
+
       const res = await axios.get(`${baseURL}/admin/inquiries`, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       // console.log("문의 reducer", res.data.inquiries);
       return res.data.inquiries;

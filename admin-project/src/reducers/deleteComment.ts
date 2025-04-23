@@ -1,6 +1,7 @@
 // reducers/adminCommentSlice.ts
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 // export interface DeleteComment {
 //   commentId: number;
@@ -26,10 +27,15 @@ export const deleteCommentByAdmin = createAsyncThunk<
   { rejectValue: string }
 >("admin/deleteCommentByAdmin", async (commentId, { rejectWithValue }) => {
   try {
+    const token = Cookies.get("accessToken");
+
     const response = await axios.delete(
       `${baseURL}/admin/comments/${commentId}`,
       {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
+        },
       }
     );
     if (response.data.ok) {
