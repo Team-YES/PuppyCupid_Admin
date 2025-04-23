@@ -25,12 +25,14 @@ const initialState: ServiceUsageState = {
   error: null,
 };
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
 // 📡 axios 요청
 export const getServiceUsageStats = createAsyncThunk<UsageStat>(
   "adminDailyActivity/getServiceUsageStats",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:5000/admin/count", {
+      const res = await axios.get(`${baseURL}/admin/count`, {
         withCredentials: true,
       });
       console.log(res.data, "/??");

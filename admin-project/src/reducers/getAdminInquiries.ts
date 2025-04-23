@@ -39,12 +39,14 @@ const initialState: AdminInquiriesState = {
   error: null,
 };
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
 // 문의 데이터 받기 thunk
 export const getAdminInquiries = createAsyncThunk<Inquiry[]>(
   "adminInquiries/getAdminInquiries",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:5000/admin/inquiries", {
+      const res = await axios.get(`${baseURL}/admin/inquiries`, {
         withCredentials: true,
       });
       // console.log("문의 reducer", res.data.inquiries);
@@ -62,7 +64,7 @@ export const deleteAdminInquiry = createAsyncThunk<number, number>(
   async (inquiryId, { rejectWithValue }) => {
     try {
       const res = await axios.delete(
-        `http://localhost:5000/admin/inquiries/${inquiryId}`,
+        `${baseURL}/admin/inquiries/${inquiryId}`,
         {
           withCredentials: true,
         }
@@ -84,7 +86,7 @@ export const patchInquiryStatus = createAsyncThunk<
   async ({ id, status }, { rejectWithValue }) => {
     try {
       const res = await axios.patch(
-        `http://localhost:5000/admin/inquiries/${id}/status`,
+        `${baseURL}/admin/inquiries/${id}/status`,
         { status },
         {
           withCredentials: true,

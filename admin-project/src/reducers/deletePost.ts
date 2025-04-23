@@ -13,6 +13,8 @@ const initialState: AdminPostState = {
   deletedPostIds: [],
 };
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
 // thunk 정의: 게시글 삭제
 export const deletePostByAdmin = createAsyncThunk<
   { postId: number }, // 성공 시 반환 타입
@@ -20,12 +22,9 @@ export const deletePostByAdmin = createAsyncThunk<
   { rejectValue: string } // 실패 시 반환 타입
 >("admin/deletePostByAdmin", async (postId, { rejectWithValue }) => {
   try {
-    const res = await axios.delete(
-      `http://localhost:5000/admin/posts/${postId}`,
-      {
-        withCredentials: true,
-      }
-    );
+    const res = await axios.delete(`${baseURL}/admin/posts/${postId}`, {
+      withCredentials: true,
+    });
     console.log(res.data);
     return { postId };
   } catch (err: any) {

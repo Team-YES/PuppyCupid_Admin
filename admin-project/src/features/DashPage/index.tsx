@@ -4,6 +4,8 @@ import axios from "axios";
 import TitleCompo from "@/components/TitleCompo";
 import { DashStyled } from "./styled";
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
 const DashBoard = () => {
   const router = useRouter();
   const alertedRef = useRef(false);
@@ -13,12 +15,9 @@ const DashBoard = () => {
     const checkAdminLogin = async () => {
       try {
         // 서버에서 로그인 상태 확인
-        const response = await axios.get(
-          "http://localhost:5000/auth/adminCheck",
-          {
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get(`${baseURL}/auth/adminCheck`, {
+          withCredentials: true,
+        });
 
         if (!response.data.isLoggedIn) {
           if (!alertedRef.current) {

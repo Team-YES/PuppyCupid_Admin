@@ -18,12 +18,14 @@ const initialState: AdminPostsCountState = {
   error: null,
 };
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
 // Thunk (비동기 요청)
 export const getAdminPostsCount = createAsyncThunk<number>(
   "adminPostsCount/getAdminPostsCount",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:5000/admin/postsCount", {
+      const res = await axios.get(`${baseURL}/admin/postsCount`, {
         withCredentials: true,
       });
       return res.data.count;

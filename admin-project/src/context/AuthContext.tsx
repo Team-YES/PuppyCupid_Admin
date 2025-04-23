@@ -26,6 +26,8 @@ type AuthContextType = {
   logout: () => void;
 };
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => {
@@ -46,12 +48,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const token = Cookies.get("access_token");
 
-      const response = await axios.get(
-        "http://localhost:5000/auth/adminCheck",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${baseURL}/auth/adminCheck`, {
+        withCredentials: true,
+      });
 
       if (response.data.isLoggedIn) {
         setIsLoggedIn(true);

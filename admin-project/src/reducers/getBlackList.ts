@@ -26,6 +26,8 @@ interface AddBlacklistResponse {
   ok: boolean;
 }
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
 // 블랙리스트 추가
 export const addBlacklistUser = createAsyncThunk<
   AddBlacklistResponse, // 성공 시 반환 타입
@@ -34,7 +36,7 @@ export const addBlacklistUser = createAsyncThunk<
 >("blacklist/addUser", async ({ userId, reason }, { rejectWithValue }) => {
   try {
     const res = await axios.post(
-      `http://localhost:5000/admin/blacklist/${userId}`,
+      `${baseURL}/admin/blacklist/${userId}`,
       { reason },
       { withCredentials: true }
     );
@@ -57,7 +59,7 @@ export const getBlacklist = createAsyncThunk<
   { rejectValue: string }
 >("blacklist/getList", async (_, { rejectWithValue }) => {
   try {
-    const res = await axios.get("http://localhost:5000/admin/blacklist", {
+    const res = await axios.get(`${baseURL}/admin/blacklist`, {
       withCredentials: true,
     });
     console.log("블랙리스트 조회 reducer", res.data);
@@ -76,10 +78,9 @@ export const removeBlacklistUser = createAsyncThunk<
   { rejectValue: string }
 >("blacklist/removeUser", async (userId, { rejectWithValue }) => {
   try {
-    const res = await axios.delete(
-      `http://localhost:5000/admin/blacklist/${userId}`,
-      { withCredentials: true }
-    );
+    const res = await axios.delete(`${baseURL}/admin/blacklist/${userId}`, {
+      withCredentials: true,
+    });
 
     if (!res.data?.ok) {
       return rejectWithValue("블랙리스트 해제 실패 (응답 실패)");

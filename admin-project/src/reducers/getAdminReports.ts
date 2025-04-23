@@ -34,11 +34,13 @@ const initialState: AdminReportsState = {
   error: null,
 };
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
 export const getAdminReports = createAsyncThunk(
   "adminReports/getAdminReports",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:5000/admin/reports", {
+      const res = await axios.get(`${baseURL}/admin/reports`, {
         withCredentials: true,
       });
 

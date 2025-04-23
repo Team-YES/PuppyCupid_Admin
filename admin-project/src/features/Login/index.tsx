@@ -3,7 +3,10 @@ import { LoginFeatStyled } from "./styled";
 import { Form, Input, Button } from "antd";
 import { useRouter } from "next/router";
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
 const LoginFeat = () => {
+  console.log("로그인창입니다.");
   const router = useRouter();
 
   // 로그인 정보 전송
@@ -12,7 +15,7 @@ const LoginFeat = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/auth/adminLogin",
+        `${baseURL}/auth/adminLogin`,
         {
           email: values.id,
           password: values.password,

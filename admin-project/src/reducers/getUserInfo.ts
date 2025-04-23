@@ -31,11 +31,13 @@ const initialState: AdminUserState = {
   error: null,
 };
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
 // 유저 정보 가져오는 비동기 thunk
 export const fetchAdminUsers = createAsyncThunk(
   "admin/fetchUsers",
   async () => {
-    const res = await axios.get("http://localhost:5000/admin/users", {
+    const res = await axios.get(`${baseURL}/admin/users`, {
       withCredentials: true,
     });
     // console.log(res.data);
@@ -47,7 +49,7 @@ export const fetchAdminUsers = createAsyncThunk(
 export const deleteAdminUser = createAsyncThunk(
   "admin/deleteUser",
   async (userId: number, { dispatch }) => {
-    await axios.delete(`http://localhost:5000/admin/users/${userId}`, {
+    await axios.delete(`${baseURL}/admin/users/${userId}`, {
       withCredentials: true,
     });
     // 삭제 후 유저 목록 갱신

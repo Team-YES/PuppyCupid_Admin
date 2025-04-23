@@ -24,12 +24,14 @@ const initialState: AdminPaymentsState = {
   error: null,
 };
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
 // 결제 내역 요청 thunk
 export const getAdminPayments = createAsyncThunk<Payment[]>(
   "adminPayments/getAdminPayments",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:5000/admin/payments", {
+      const res = await axios.get(`${baseURL}/admin/payments`, {
         withCredentials: true,
       });
       console.log(res.data);

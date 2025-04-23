@@ -18,6 +18,8 @@ const initialState: AdminCommentState = {
   deletedCommentIds: [],
 };
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
 export const deleteCommentByAdmin = createAsyncThunk<
   { commentId: number }, // 성공 시 반환
   number, // 전달 인자
@@ -25,7 +27,7 @@ export const deleteCommentByAdmin = createAsyncThunk<
 >("admin/deleteCommentByAdmin", async (commentId, { rejectWithValue }) => {
   try {
     const response = await axios.delete(
-      `http://localhost:5000/admin/comments/${commentId}`,
+      `${baseURL}/admin/comments/${commentId}`,
       {
         withCredentials: true,
       }
