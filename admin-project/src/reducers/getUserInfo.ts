@@ -38,7 +38,7 @@ const baseURL = process.env.NEXT_PUBLIC_API_URL;
 export const fetchAdminUsers = createAsyncThunk(
   "admin/fetchUsers",
   async () => {
-    const token = Cookies.get("accessToken");
+    const token = Cookies.get("access_token");
 
     const res = await axios.get(`${baseURL}/admin/users`, {
       withCredentials: true,
@@ -55,7 +55,7 @@ export const fetchAdminUsers = createAsyncThunk(
 export const deleteAdminUser = createAsyncThunk(
   "admin/deleteUser",
   async (userId: number, { dispatch }) => {
-    const token = Cookies.get("accessToken");
+    const token = Cookies.get("access_token");
 
     await axios.delete(`${baseURL}/admin/users/${userId}`, {
       withCredentials: true,

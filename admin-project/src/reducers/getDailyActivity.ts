@@ -33,7 +33,7 @@ export const getServiceUsageStats = createAsyncThunk<UsageStat>(
   "adminDailyActivity/getServiceUsageStats",
   async (_, { rejectWithValue }) => {
     try {
-      const token = Cookies.get("accessToken");
+      const token = Cookies.get("access_token");
 
       const res = await axios.get(`${baseURL}/admin/count`, {
         withCredentials: true,

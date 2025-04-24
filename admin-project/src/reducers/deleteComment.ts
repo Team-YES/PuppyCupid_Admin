@@ -27,7 +27,7 @@ export const deleteCommentByAdmin = createAsyncThunk<
   { rejectValue: string }
 >("admin/deleteCommentByAdmin", async (commentId, { rejectWithValue }) => {
   try {
-    const token = Cookies.get("accessToken");
+    const token = Cookies.get("access_token");
 
     const response = await axios.delete(
       `${baseURL}/admin/comments/${commentId}`,

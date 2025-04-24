@@ -15,8 +15,8 @@ const DashBoard = () => {
   useEffect(() => {
     const checkAdminLogin = async () => {
       try {
-        // 쿠키에서 accessToken 가져오기
-        const token = Cookies.get("accessToken");
+        // 쿠키에서 access_token 가져오기
+        const token = Cookies.get("access_token");
 
         // 서버에서 로그인 상태 확인
         const response = await axios.get(`${baseURL}/auth/adminCheck`, {

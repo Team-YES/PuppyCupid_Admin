@@ -47,7 +47,7 @@ export const getAdminInquiries = createAsyncThunk<Inquiry[]>(
   "adminInquiries/getAdminInquiries",
   async (_, { rejectWithValue }) => {
     try {
-      const token = Cookies.get("accessToken");
+      const token = Cookies.get("access_token");
 
       const res = await axios.get(`${baseURL}/admin/inquiries`, {
         withCredentials: true,
@@ -69,7 +69,7 @@ export const deleteAdminInquiry = createAsyncThunk<number, number>(
   "adminInquiries/deleteAdminInquiry",
   async (inquiryId, { rejectWithValue }) => {
     try {
-      const token = Cookies.get("accessToken");
+      const token = Cookies.get("access_token");
 
       const res = await axios.delete(
         `${baseURL}/admin/inquiries/${inquiryId}`,
@@ -96,7 +96,7 @@ export const patchInquiryStatus = createAsyncThunk<
   "adminInquiries/patchInquiryStatus",
   async ({ id, status }, { rejectWithValue }) => {
     try {
-      const token = Cookies.get("accessToken");
+      const token = Cookies.get("access_token");
 
       const res = await axios.patch(
         `${baseURL}/admin/inquiries/${id}/status`,

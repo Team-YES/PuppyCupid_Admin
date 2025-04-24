@@ -36,7 +36,7 @@ export const addBlacklistUser = createAsyncThunk<
   { rejectValue: string } // 실패 시 반환 타입
 >("blacklist/addUser", async ({ userId, reason }, { rejectWithValue }) => {
   try {
-    const token = Cookies.get("accessToken");
+    const token = Cookies.get("access_token");
 
     const res = await axios.post(
       `${baseURL}/admin/blacklist/${userId}`,
@@ -67,7 +67,7 @@ export const getBlacklist = createAsyncThunk<
   { rejectValue: string }
 >("blacklist/getList", async (_, { rejectWithValue }) => {
   try {
-    const token = Cookies.get("accessToken");
+    const token = Cookies.get("access_token");
 
     const res = await axios.get(`${baseURL}/admin/blacklist`, {
       withCredentials: true,
@@ -91,7 +91,7 @@ export const removeBlacklistUser = createAsyncThunk<
   { rejectValue: string }
 >("blacklist/removeUser", async (userId, { rejectWithValue }) => {
   try {
-    const token = Cookies.get("accessToken");
+    const token = Cookies.get("access_token");
 
     const res = await axios.delete(`${baseURL}/admin/blacklist/${userId}`, {
       withCredentials: true,

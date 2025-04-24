@@ -41,7 +41,7 @@ export const getAdminReports = createAsyncThunk(
   "adminReports/getAdminReports",
   async (_, { rejectWithValue }) => {
     try {
-      const token = Cookies.get("accessToken");
+      const token = Cookies.get("access_token");
 
       const res = await axios.get(`${baseURL}/admin/reports`, {
         withCredentials: true,

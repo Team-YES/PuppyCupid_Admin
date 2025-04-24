@@ -32,7 +32,7 @@ export const getAdminPayments = createAsyncThunk<Payment[]>(
   "adminPayments/getAdminPayments",
   async (_, { rejectWithValue }) => {
     try {
-      const token = Cookies.get("accessToken");
+      const token = Cookies.get("access_token");
 
       const res = await axios.get(`${baseURL}/admin/payments`, {
         withCredentials: true,

@@ -29,17 +29,17 @@ const LoginFeat = () => {
       if (res.data.ok) {
         console.log("로그인 성공", res.data);
 
-        const { accessToken, refreshToken } = res.data;
+        const { access_token, refresh_token } = res.data;
 
-        // accessToken 쿠키 저장 (1시간 유지)
-        Cookies.set("accessToken", accessToken, {
+        // access_token 쿠키 저장 (1시간 유지)
+        Cookies.set("access_token", access_token, {
           expires: 1 / 24, // 1시간 (1일 ÷ 24)
           path: "/",
           sameSite: "Strict", // CSRF 방지용 (필요 시 Lax 또는 None)
         });
 
         // refreshToken 쿠키 저장 (7일 유지)
-        Cookies.set("refreshToken", refreshToken, {
+        Cookies.set("refresh_token", refresh_token, {
           expires: 7,
           path: "/",
           sameSite: "Strict",

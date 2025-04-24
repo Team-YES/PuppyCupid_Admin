@@ -26,7 +26,7 @@ export const getAdminPostsCount = createAsyncThunk<number>(
   "adminPostsCount/getAdminPostsCount",
   async (_, { rejectWithValue }) => {
     try {
-      const token = Cookies.get("accessToken");
+      const token = Cookies.get("access_token");
 
       const res = await axios.get(`${baseURL}/admin/postsCount`, {
         withCredentials: true,
