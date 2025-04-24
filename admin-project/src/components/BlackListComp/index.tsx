@@ -24,7 +24,7 @@ const BlackListComp = ({ title, button }: TitleProps) => {
 
   const [info, setInfo] = useState<BlacklistedUser[]>([]);
 
-  console.log("블랙리스트", info);
+  // console.log("블랙리스트", info);
 
   useEffect(() => {
     dispatch(getBlacklist());

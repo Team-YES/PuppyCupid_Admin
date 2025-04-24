@@ -7,12 +7,12 @@ import Cookies from "js-cookie";
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 const LoginFeat = () => {
-  console.log("로그인창입니다.");
+  // console.log("로그인창입니다.");
   const router = useRouter();
 
   // 로그인 정보 전송
   const onFinish = async (values: { id: string; password: string }) => {
-    console.log("로그인 정보:", values);
+    // console.log("로그인 정보:", values);
 
     try {
       const res = await axios.post(
@@ -27,7 +27,7 @@ const LoginFeat = () => {
       );
 
       if (res.data.ok) {
-        console.log("로그인 성공", res.data);
+        // console.log("로그인 성공", res.data);
 
         const { access_token, refresh_token } = res.data;
 

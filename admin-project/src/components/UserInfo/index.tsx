@@ -35,7 +35,7 @@ const UserInfo = ({ title, button }: TitleProps) => {
     setInfo(users); // Redux 데이터 → 로컬 상태 복사
   }, [users]);
 
-  console.log("유저 정보", info);
+  // console.log("유저 정보", info);
 
   // 페이지네이션 계산
   const [currentPage, setCurrentPage] = useState(1);

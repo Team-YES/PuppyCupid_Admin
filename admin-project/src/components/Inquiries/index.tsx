@@ -52,7 +52,7 @@ const InquiriesComp = ({ title, button }: TitleProps) => {
   const [info, setInfo] = useState<Inquiry[]>([]);
   const [filterType, setFilterType] = useState<string>("all");
 
-  console.log("문의정보", info);
+  // console.log("문의정보", info);
 
   // 문의 정보 및 모달 상태
   const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);

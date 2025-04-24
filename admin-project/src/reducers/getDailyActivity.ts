@@ -41,7 +41,7 @@ export const getServiceUsageStats = createAsyncThunk<UsageStat>(
           Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
         },
       });
-      console.log(res.data, "/??");
+      // console.log(res.data, "/??");
       return res.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || error.message);

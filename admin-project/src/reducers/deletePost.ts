@@ -31,7 +31,7 @@ export const deletePostByAdmin = createAsyncThunk<
         Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
       },
     });
-    console.log(res.data);
+    // console.log(res.data);
     return { postId };
   } catch (err: any) {
     return rejectWithValue("게시글 삭제에 실패했습니다.");

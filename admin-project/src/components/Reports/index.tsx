@@ -45,7 +45,7 @@ const ReportsComp = ({ title, button }: TitleProps) => {
   const [info, setInfo] = useState<Report[]>([]);
   const [filterType, setFilterType] = useState<string>("all");
 
-  console.log("신고정보", info);
+  // console.log("신고정보", info);
 
   // 페이지네이션 계산
   const [currentPage, setCurrentPage] = useState(1);
@@ -95,7 +95,7 @@ const ReportsComp = ({ title, button }: TitleProps) => {
   // 블랙리스트 조회
   const blackList = useSelector((state: RootState) => state.blacklist.list);
 
-  console.log("blackList", blackList);
+  // console.log("blackList", blackList);
 
   const handleAddToBlacklist = async () => {
     // 사유가 비어있을때

@@ -57,9 +57,9 @@ const TitleCompo = ({ title, button }: TitleProps) => {
   const [dailyAllData, setDailyAllData] = useState<UsageStat>();
   // console.log("대시보드 문의정보", info);
   // console.log("대시보드 유저정보", userInfo);
-  console.log("대시보드 결제정보", payInfo);
-  console.log("대시보드 총 게시물 수", postCount);
-  console.log("올데이터", dailyAllData);
+  // console.log("대시보드 결제정보", payInfo);
+  // console.log("대시보드 총 게시물 수", postCount);
+  // console.log("올데이터", dailyAllData);
   // 이번주 가입자 수
   const thisWeekJoinCount = getThisWeekJoinCount(userInfo);
   // console.log("이번주 가입자수", thisWeekJoinCount);

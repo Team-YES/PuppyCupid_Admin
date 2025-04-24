@@ -40,7 +40,7 @@ export const getAdminPayments = createAsyncThunk<Payment[]>(
           Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
         },
       });
-      console.log(res.data);
+      // console.log(res.data);
       return res.data.payments;
     } catch (error: any) {
       console.error("결제 내역 요청 실패:", error);

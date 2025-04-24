@@ -52,7 +52,7 @@ export const addBlacklistUser = createAsyncThunk<
     if (!res.data?.ok) {
       return rejectWithValue("블랙리스트 추가 실패 (응답 실패)");
     }
-    console.log("블랙리스트 추가 reducer", res.data);
+    // console.log("블랙리스트 추가 reducer", res.data);
     return res.data; // 성공 시 응답 데이터 반환
   } catch (error: any) {
     console.error("블랙리스트 추가 에러:", error);
@@ -75,7 +75,7 @@ export const getBlacklist = createAsyncThunk<
         Authorization: `Bearer ${token}`, // ✅ 토큰을 Authorization 헤더로 전송
       },
     });
-    console.log("블랙리스트 조회 reducer", res.data);
+    // console.log("블랙리스트 조회 reducer", res.data);
     return res.data.blacklists;
   } catch (error: any) {
     return rejectWithValue(
@@ -103,7 +103,7 @@ export const removeBlacklistUser = createAsyncThunk<
     if (!res.data?.ok) {
       return rejectWithValue("블랙리스트 해제 실패 (응답 실패)");
     }
-    console.log("블랙리스트 삭제", res.data);
+    // console.log("블랙리스트 삭제", res.data);
     return res.data; // 성공 시 삭제된 ID 반환
   } catch (error: any) {
     return rejectWithValue(
