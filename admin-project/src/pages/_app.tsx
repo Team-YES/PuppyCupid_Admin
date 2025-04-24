@@ -20,7 +20,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 900) {
+      if (window.innerWidth <= 800) {
         setNotPc(true);
       } else {
         setNotPc(false);
