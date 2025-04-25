@@ -42,6 +42,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
+        <link rel="icon" href="/icon.png" />
         <title>관리자 페이지</title>
       </Head>
 
